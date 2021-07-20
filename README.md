@@ -192,7 +192,47 @@ This section is only for verified data providers!
     "params": {
         "users": [
             {
-            ...
+                "addressid"   : 10000,
+                "mail"        : "max@mustermann.de",
+                "pass"        : "passwort",
+                "sex"         : "F",
+                "salutation"  : "Frau",
+                "title"       : "Dr.",
+                "firstname"   : "Max",
+                "lastname"    : "Mustermann",
+                "birthdate"   : "1977-12-03",
+                "company"     : "urbanstudio GmbH",
+                "department"  : "Programmierung",
+                "memberof"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 836,
+                        "in"      : "2015-01-01",
+                        "out"     : "2018-12-31",
+                        "active"  : 0
+                    }
+                ],
+                "agmemberof"    : [
+                    {
+                        "name"    : ""AG Physik und Technik in der bildgebende"",
+                        "id"      : 4
+                    },
+                    {
+                        "name"    : "FFZ",
+                        "id"      : 17
+                    }
+                ],
+                "participatingids"    : [
+                    "BASIC",
+                    "CONRAD-RD2"
+                ]
             }
         ]
     },
@@ -206,4 +246,155 @@ This section is only for verified data providers!
     "result" : "OK",
     "id" : "1"
 }
+```
+### User change push
+
+Send only users with changes!
+
+```
+### Request:
+{
+    "method": "data.changePush", 
+    "id": "[uuid]",
+    "params": {
+        "users": [
+            {
+                "addressid"   : 10000,
+                "mail"        : "max@mustermann.de",
+                "pass"        : "passwort",
+                "sex"         : "F",
+                "salutation"  : "Frau",
+                "title"       : "Dr.",
+                "firstname"   : "Max",
+                "lastname"    : "Mustermann",
+                "birthdate"   : "1977-12-03",
+                "company"     : "urbanstudio GmbH",
+                "department"  : "Programmierung",
+                "memberof"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 836,
+                        "in"      : "2015-01-01",
+                        "out"     : "2018-12-31",
+                        "active"  : 0
+                    }
+                ],
+                "agmemberof"    : [
+                    {
+                        "name"    : ""AG Physik und Technik in der bildgebende"",
+                        "id"      : 4
+                    },
+                    {
+                        "name"    : "FFZ",
+                        "id"      : 17
+                    }
+                ],
+                "participatingids"    : [
+                    "BASIC",
+                    "CONRAD-RD2"
+                ]
+            }
+        ]
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
+```
+
+### User password change push
+
+Send only one users password change!
+
+```
+### Request:
+{
+    "method": "data.pwPush", 
+    "id": "[uuid]",
+    "params": {
+        "addressid"   : 10000,
+        "pass"        : "passwort"
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
+```
+## 3 Endpoints in API of data provider
+
+This section is only for verified data providers!
+A data provider must implement the following methods on its endpoint that we may request some thing.
+In these cases the data provider receives the request
+
+### User password change push
+
+Send only one users password change!
+
+```
+### Request:
+{
+    "method": "data.pwPush", 
+    "id": "[uuid]",
+    "params": {
+        "addressid"   : 10000,
+        "pass"        : "passwort"
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
+```
+
+### Request user list push
+
+To request a user list push. *** Do not answer with a users list, instead send separate data.listPush ***
+
+```
+### Request:
+{
+    "method": "data.requestUserListPush", 
+    "id": "[uuid]",
+    "params": {
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
+```
+### Request one users whole data
+
+Has to be implemented later. This will request for a complete data set of one customer (including addresses etc.)
+```
+TODO 
 ```
