@@ -31,7 +31,7 @@ This ist asyncronous so you must implement a API method that we are able to rece
 
 ### Onboarding
 
-The API endpoint for the onboarding is ```https://api.radisso.de/onboarding/```
+The API endpoint for the ```onboarding``` is ```https://api.radisso.de/onboarding/request/```
 
 1. Request onboarding
 
@@ -74,12 +74,16 @@ You will receive a response like
     "id" : "1"
 }
 ```
-#### After a review you will receive a request 
+#### After a review you will receive a request
+
+The request will be created on the API endpoint you provided in your onboarding request.
 
 The complete request body will be encrypted. For processing you need to decrypt using your private key.
 
 ##### If your request has been verified
+
 ```loginEnpoints```wird nur bei ```type``` == ```website``` geliefert.
+
 You must save the id, all other API requests need uuid as id
 ```
 {
@@ -121,6 +125,10 @@ You must save the id, all other API requests need uuid as id
 }
 ```
 ### Other methods
+
+The API endpoint for the following methods is ```https://api.radisso.de/```
+
+_Since you are verified, you must encrypt the request body with our PubKey that has been provided to you in the verification request._
 
 #### onboarding.removeDomains
 
