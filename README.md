@@ -55,7 +55,7 @@ The appname must be unique, you will need this later.
             "endpoint"  : "https://[your-api-domain]:[port]/[path]",
             "otat"      : "[one-time-auth-token]",
             "pubkey"    : "[base64-of-pub-your-key]",
-            "pubkeydl"  : "https://[your-domain]/[appname].pub
+            "pubkeydl"  : "https://[your-domain]/[appname].pub"
         },
         "domains" : [
             "domain1.de",
@@ -76,18 +76,22 @@ You will receive a response like
 ```
 #### After a review you will receive a request 
 
+The complete request body will be encrypted. For processing you need to decrypt using your private key.
+
 ##### If your request has been verified
 ```loginEnpoints```wird nur bei ```type``` == ```website``` geliefert.
+You must save the id, all other API requests need uuid as id
 ```
 {
     "method": "radisso.onboardingVerification", 
-    "id": "1", 
-    "result": {
+    "id": "[uuid]", 
+    "params": {
         "appname" : "YOUR-APP-NAME",
         "type"    : "website",
         "state"    : "verified",
         "api" : {
             "endpoint"  : "https://[our-api-domain]:[port]/[path]",
+            "pubkeydl"  : "https://[our-api-domain]/[appname].pub"
         },
         "loginEnpoints" : [
             {
@@ -107,8 +111,8 @@ You will receive a response like
 ```
 {
     "method": "radisso.onboardingVerification", 
-    "id": "1", 
-    "result": {
+    "id": "[uuid]", 
+    "params": {
         "appname" : "YOUR-APP-NAME",
         "type"    : "website",
         "state"   : "declined"
@@ -116,3 +120,50 @@ You will receive a response like
     "jsonrpc": "2.0"
 }
 ```
+### Other methods
+
+#### onboarding.removeDomains
+
+(Don't forget to send your ```uuid```as id
+
+{
+    "method": "onboarding.removeDomains", 
+    "id": "[uuid]", 
+    "params": {
+    "domains": [
+        "domain1.de"
+    ],
+    "jsonrpc": "2.0"
+}
+
+
+#### onboarding.addDomains
+
+(Don't forget to send your ```uuid```as id
+
+{
+    "method": "onboarding.addDomains", 
+    "id": "[uuid]", 
+    "params": {
+    "domains": [
+        "domain1.de"
+    ],
+    "jsonrpc": "2.0"
+}
+
+#### onboarding.updatePerson
+
+(Don't forget to send your ```uuid```as id
+
+{
+    "method": "onboarding.addDomains", 
+    "id": "[uuid]", 
+    "params": {
+    "person"  : {
+        "name"     : "Max Mustermann",
+        "email"    : "max@mustermann.de",
+        "phone"    : "0123456789012"
+    },
+    "jsonrpc": "2.0"
+}
+
