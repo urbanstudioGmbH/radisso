@@ -178,3 +178,32 @@ _Since you are verified, you must encrypt the request body with our PubKey that 
     "jsonrpc": "2.0"
 }
 ```
+## 3 Data provider APIs
+
+This section is only for verified data providers!
+
+### User list push
+
+```
+### Request:
+{
+    "method": "data.listPush", 
+    "id": "[uuid]",
+    "params": {
+        "users": [
+            {
+            ...
+            }
+        ]
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
+```
