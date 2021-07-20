@@ -1,13 +1,13 @@
 # radisso
-radisso is a SSO eco system for the radiology society of the DRG and assosiated societies in Germany
+radisso is an SSO (Single-Sign-On) eco system for the radiology society of the DRG and associated societies in Germany
 
 ### Prerequisites
-There are some thigs that need attention when onboarding.
+There are few things you need to take care of before onboarding:
 1. make sure your API-Endpoint is secured by an SSL-Certificate
-2. create an PrivKey/PubKey Pair
+2. create a PrivKey/PubKey Pair (RSA, 4096bit, see below)
 3. to receive API-Requests send your onboarding request to service@urbanstudio.de
   - an APP Name (max 20 characters)
-  - including your public key (named as {APPNAME}.pub
+  - including your public key (named as {APPNAME}.pub) - do not send your private key!
   - API endpoint of your staging environment (incl. port no)
   - API endpoint of your production environment (incl. port no.)
 
@@ -27,7 +27,7 @@ openssl rsa -in "${APPNAME}.key" -pubout -out "${APPNAME}.pub";
 ## 2 Onboarding API
 
 All data send through the API will be strongly encrypted, except the first onboarding.
-This ist asyncronous so you must implement a API method that we are able to receive your answer.
+This is asyncronous, so you will have to implement an API method that we can call for you to be able to receive your answer.
 
 ### Onboarding
 
@@ -78,13 +78,13 @@ You will receive a response like
 
 The request will be created on the API endpoint you provided in your onboarding request.
 
-The complete request body will be encrypted. For processing you need to decrypt using your private key.
+The complete request body will be encrypted. For processing you need to decrypt it using your private key.
 
 ##### If your request has been verified
 
-```loginEnpoints```wird nur bei ```type``` == ```website``` geliefert.
+```loginEnpoints``` will only be deliverd if ```type``` == ```website``` .
 
-You must save the id, all other API requests need uuid as id
+You need to save the id locally, as all other API requests need uuid as id
 ```
 {
     "method": "radisso.onboardingVerification", 
@@ -128,7 +128,7 @@ You must save the id, all other API requests need uuid as id
 
 The API endpoint for the following methods is ```https://api.radisso.de/```
 
-_Since you are verified, you must encrypt the request body with our PubKey that has been provided to you in the verification request._
+_Since you are verified, you must encrypt the request body with **our** PubKey that has been provided to you in the verification request._
 
 #### onboarding.removeDomains
 
@@ -342,8 +342,8 @@ Send only one users password change!
 ## 3 Endpoints in API of data provider
 
 This section is only for verified data providers!
-A data provider must implement the following methods on its endpoint that we may request some thing.
-In these cases the data provider receives the request
+A data provider must implement the following methods on its endpoint, which we might request at any given time.
+In these cases the data provider receives the request.
 
 ### User password change push
 
