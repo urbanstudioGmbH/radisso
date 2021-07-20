@@ -74,3 +74,45 @@ You will receive a response like
     "id" : "1"
 }
 ```
+#### After a review you will receive a request 
+
+##### If your request has been verified
+```loginEnpoints```wird nur bei ```type``` == ```website``` geliefert.
+```
+{
+    "method": "radisso.onboardingVerification", 
+    "id": "1", 
+    "result": {
+        "appname" : "YOUR-APP-NAME",
+        "type"    : "website",
+        "state"    : "verified",
+        "api" : {
+            "endpoint"  : "https://[our-api-domain]:[port]/[path]",
+        },
+        "loginEnpoints" : [
+            {
+                "mandant"   : "DRG",
+                "url"       : "https://radisso.de/drg/"
+            },
+            {
+                "mandant"   : "NONE",
+                "url"       : "https://radisso.de/login"
+            }
+        ]
+    }, 
+    "jsonrpc": "2.0"
+}
+```
+##### If your request has been declined
+```
+{
+    "method": "radisso.onboardingVerification", 
+    "id": "1", 
+    "result": {
+        "appname" : "YOUR-APP-NAME",
+        "type"    : "website",
+        "state"   : "declined"
+    }, 
+    "jsonrpc": "2.0"
+}
+```
