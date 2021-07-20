@@ -138,9 +138,10 @@ _Since you are verified, you must encrypt the request body with our PubKey that 
     "method": "onboarding.removeDomains", 
     "id": "[uuid]", 
     "params": {
-    "domains": [
-        "domain1.de"
-    ],
+        "domains": [
+            "domain1.de"
+        ]
+    },
     "jsonrpc": "2.0"
 }
 ```
@@ -153,9 +154,10 @@ _Since you are verified, you must encrypt the request body with our PubKey that 
     "method": "onboarding.addDomains", 
     "id": "[uuid]", 
     "params": {
-    "domains": [
-        "domain1.de"
-    ],
+        "domains": [
+            "domain1.de"
+        ]
+    },
     "jsonrpc": "2.0"
 }
 ```
@@ -167,10 +169,11 @@ _Since you are verified, you must encrypt the request body with our PubKey that 
     "method": "onboarding.addDomains", 
     "id": "[uuid]", 
     "params": {
-    "person"  : {
-        "name"     : "Max Mustermann",
-        "email"    : "max@mustermann.de",
-        "phone"    : "0123456789012"
+        "person"  : {
+            "name"     : "Max Mustermann",
+            "email"    : "max@mustermann.de",
+            "phone"    : "0123456789012"
+        }
     },
     "jsonrpc": "2.0"
 }
