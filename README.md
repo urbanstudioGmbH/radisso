@@ -125,7 +125,7 @@ You must save the id, all other API requests need uuid as id
 #### onboarding.removeDomains
 
 (Don't forget to send your ```uuid```as id
-
+```
 {
     "method": "onboarding.removeDomains", 
     "id": "[uuid]", 
@@ -135,12 +135,12 @@ You must save the id, all other API requests need uuid as id
     ],
     "jsonrpc": "2.0"
 }
-
+```
 
 #### onboarding.addDomains
 
 (Don't forget to send your ```uuid```as id
-
+```
 {
     "method": "onboarding.addDomains", 
     "id": "[uuid]", 
@@ -150,11 +150,11 @@ You must save the id, all other API requests need uuid as id
     ],
     "jsonrpc": "2.0"
 }
-
+```
 #### onboarding.updatePerson
 
 (Don't forget to send your ```uuid```as id
-
+```
 {
     "method": "onboarding.addDomains", 
     "id": "[uuid]", 
@@ -166,4 +166,4 @@ You must save the id, all other API requests need uuid as id
     },
     "jsonrpc": "2.0"
 }
-
+```
