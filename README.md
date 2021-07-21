@@ -675,3 +675,29 @@ So the website may use correct email address for notifications, if needed.
     "id" : "1"
 }
 ```
+## 4 Test your implementation
+
+To test your implementation we have a staging system
+
+You will add "dev." in the URL of the API and loginEndpoints. 
+
+Staging-API-Url:          https://dev.api.radisso.de/
+Staging-Main-Login-Url:   https://dev.radisso.de
+
+The Staging system will be available on the end of July 2021
+
+## Changelog
+
+### [0.0.3] - 2021-07-21
+
+#### Changed
+- added data provider and website methods
+
+### [0.0.2] - 2021-07-20
+
+#### Changed
+- added onboarding process
+
+### [0.0.1] - 2021-07-19
+
+#### Created
