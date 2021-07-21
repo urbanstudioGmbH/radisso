@@ -682,7 +682,7 @@ To test your implementation we have a staging system
 You will add "dev." in the URL of the API and loginEndpoints. 
 
 Staging-API-Url:          https://dev.api.radisso.de/
-Staging-Main-Login-Url:   https://dev.radisso.de
+Staging-Main-Login-Url:   https://dev.radisso.de/
 
 The Staging system will be available on the end of July 2021
 
