@@ -13,6 +13,11 @@ There are few things you need to take care of before onboarding:
 
 Add a content type header for each request. The content type is always "application/json".
 
+### workflow model
+
+![Modell](https://user-images.githubusercontent.com/12560807/126470615-df5bfdb9-8b5c-4c40-adf5-f9d5c40a065a.jpg)
+
+
 ### Login workflow
 
 #### User is NOT loggedin in radisso
