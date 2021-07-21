@@ -94,8 +94,8 @@ You need to save the id locally, as all other API requests need uuid as id
         "type"    : "website",
         "state"    : "verified",
         "api" : {
-            "endpoint"  : "https://[our-api-domain]:[port]/[path]",
-            "pubkeydl"  : "https://[our-api-domain]/[appname].pub"
+            "endPoint"  : "https://[our-api-domain]:[port]/[path]",
+            "pubKeyDl"  : "https://[our-api-domain]/[appname].pub"
         },
         "loginEnpoints" : [
             {
@@ -166,7 +166,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 (Don't forget to send your ```uuid```as id
 ```
 {
-    "method": "onboarding.addDomains", 
+    "method": "onboarding.updatePerson", 
     "id": "[uuid]", 
     "params": {
         "person"  : {
@@ -174,6 +174,32 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
             "email"    : "max@mustermann.de",
             "phone"    : "0123456789012"
         }
+    },
+    "jsonrpc": "2.0"
+}
+```
+#### onboarding.updateEndpoint
+
+(Don't forget to send your ```uuid```as id
+```
+{
+    "method": "onboarding.updateEndpoint", 
+    "id": "[uuid]", 
+    "params": {
+        "endPoint"     : ""https://[your-api-domain]:[port]/[path]"",
+    },
+    "jsonrpc": "2.0"
+}
+```
+#### onboarding.updatePubKey
+
+(Don't forget to send your ```uuid```as id
+```
+{
+    "method": "onboarding.updatePubKey", 
+    "id": "[uuid]", 
+    "params": {
+        "pubKeyDl"     : "https://[your-api-domain]/[appname].pub",
     },
     "jsonrpc": "2.0"
 }
