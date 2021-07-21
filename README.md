@@ -1,7 +1,7 @@
 # radisso
 radisso is an SSO (Single-Sign-On) eco system for the radiology society of the DRG and associated societies in Germany
 
-### Prerequisites
+## Prerequisites
 There are few things you need to take care of before onboarding:
 1. make sure your API-Endpoint is secured by an SSL-Certificate
 2. create a PrivKey/PubKey Pair (RSA, 4096bit, see below)
@@ -10,6 +10,39 @@ There are few things you need to take care of before onboarding:
   - including your public key (named as {APPNAME}.pub) - do not send your private key!
   - API endpoint of your staging environment (incl. port no)
   - API endpoint of your production environment (incl. port no.)
+
+Add a content type header for each request. The content type is always "application/json".
+
+### Login workflow
+
+#### User is NOT loggedin in radisso
+
+1. User clicks sso login button on website
+2. User gets redirected to radisso, the url includes the originUrl for later redirection
+3. User gives credentials for login
+4. radisso sends API request to website
+5. website answers with login true|false and the redirection URL
+6. if login is true, user gets redirected
+7. if login is false, user gets message and then redirected
+
+#### User is loggedin in radisso
+
+1. User clicks sso login button on website
+2. User gets redirected to radisso, the url includes the originUrl for later redirection
+3. radisso sends API request to website
+4. website answers with login true|false and the redirection URL
+5. if login is true, user gets redirected
+6. if login is false, user gets message and then redirected
+
+#### User is loggedin in radisso, website forces SSO
+
+1. User enters a protected page in a website with parameter forceSSO=1
+2. User gets directly redirected to radisso, the url includes the originUrl for later redirection
+3. radisso sends API request to website
+4. website answers with login true|false and the redirection URL
+5. if login is true, user gets redirected
+6. if login is false, user gets message and then redirected
+
 
 ## 1 Key pair generation
 
