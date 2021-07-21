@@ -265,6 +265,7 @@ This section is only for verified data providers!
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
+                "city"        : "Harzgerode",
                 "memberof"    : [
                     {
                         "name"    : "DRG",
@@ -332,6 +333,7 @@ Send only users with changes!
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
+                "city"        : "Harzgerode",
                 "memberof"    : [
                     {
                         "name"    : "DRG",
@@ -523,6 +525,7 @@ If user has enabled 2FA, the request is sent after the 2FA check.
             "birthdate"   : "1977-12-03",
             "company"     : "urbanstudio GmbH",
             "department"  : "Programmierung",
+            "city"        : "Harzgerode",
             "memberof"    : [
                 {
                     "name"    : "DRG",
@@ -632,6 +635,7 @@ So the website may use correct email address for notifications, if needed.
             "birthdate"   : "1977-12-03",
             "company"     : "urbanstudio GmbH",
             "department"  : "Programmierung",
+            "city"        : "Harzgerode",
             "memberof"    : [
                 {
                     "name"    : "DRG",
