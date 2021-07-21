@@ -186,7 +186,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
     "method": "onboarding.updateEndpoint", 
     "id": "[uuid]", 
     "params": {
-        "endPoint"     : ""https://[your-api-domain]:[port]/[path]"",
+        "endPoint"     : "https://[your-api-domain]:[port]/[path]",
     },
     "jsonrpc": "2.0"
 }
