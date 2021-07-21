@@ -52,10 +52,8 @@ The appname must be unique, you will need this later.
             "phone"    : "0123456789012"
         },
         "api" : {
-            "endpoint"  : "https://[your-api-domain]:[port]/[path]",
-            "otat"      : "[one-time-auth-token]",
-            "pubkey"    : "[base64-of-pub-your-key]",
-            "pubkeydl"  : "https://[your-domain]/[appname].pub"
+            "endPoint"  : "https://[your-api-domain]:[port]/[path]",
+            "pubKeyDl"  : "https://[your-domain]/[appname].pub"
         },
         "domains" : [
             "domain1.de",
