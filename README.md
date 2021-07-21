@@ -398,3 +398,200 @@ Has to be implemented later. This will request for a complete data set of one cu
 ```
 TODO 
 ```
+## 3 Website APIs
+
+This section is for websites that implements radisso for user auth!
+
+At this time there are no methods used by websites.
+
+If you are missing a method, that could be used by a website communication with radisso, please open a feature request ticket here.
+
+```
+TODO 
+```
+
+## 3 Endpoints in API of website
+
+This section is only for verified websites
+!
+A data provider must implement the following methods on its endpoint, which we might request at any given time.
+In these cases the website receives the request.
+
+### create user Session
+
+Send one users data for login check on website! User is already authenticated by radisso at this moment.
+If user has enabled 2FA, the request is sent after the 2FA check.
+
+```
+### Request:
+{
+    "method": "radisso.createUserSession",
+    "id": "[uuid]",
+    "params": {
+        "originUrl" : "https://beispieldomain.de/test/?abc=def",
+        "wsvars"    : "[base64encodedstring]",
+        "user"      : {
+            "uuid"        : "[uuid]",
+            "addressid"   : 10000,
+            "mail"        : "max@mustermann.de",
+            "pass"        : "passwort",
+            "sex"         : "F",
+            "salutation"  : "Frau",
+            "title"       : "Dr.",
+            "firstname"   : "Max",
+            "lastname"    : "Mustermann",
+            "birthdate"   : "1977-12-03",
+            "company"     : "urbanstudio GmbH",
+            "department"  : "Programmierung",
+            "memberof"    : [
+                {
+                    "name"    : "DRG",
+                    "number"  : 500,
+                    "in"      : "2012-01-01",
+                    "out"     : "",
+                    "active"  : 1
+                },
+                {
+                    "name"    : "DGMP",
+                    "number"  : 836,
+                    "in"      : "2015-01-01",
+                    "out"     : "2018-12-31",
+                    "active"  : 0
+                }
+            ],
+            "agmemberof"    : [
+                {
+                    "name"    : ""AG Physik und Technik in der bildgebende"",
+                    "id"      : 4
+                },
+                {
+                    "name"    : "FFZ",
+                    "id"      : 17
+                }
+            ],
+            "participatingids"    : [
+                "BASIC",
+                "CONRAD-RD2"
+            ]
+        }
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response on success
+{
+    "jsonrpc" : "2.0",
+    "result" : {
+        "redirectUrl"   : "https://beispieldomain.de/test/?abc=def&your-key=[users-uuid-or-what-ever-you-like]",
+        "token"         : "[users-uuid]",
+        "login"         : true
+    },
+    "id" : "1"
+}
+```
+```
+### Response on error
+{
+    "jsonrpc" : "2.0",
+    "result" : {
+        "redirectUrl"   : "what-ever-url-you will redirect the user to",
+        "token"         : "[users-uuid]",
+        "message"       : "You have not enough rights to show the content",
+        "login"         : false
+    },
+    "id" : "1"
+}
+```
+
+### kill user session
+
+On user logout all websites will receive a request to kill the actual session for the user.
+
+```
+### Request:
+{
+    "method": "radisso.killUserSession", 
+    "id": "[uuid]",
+    "params": {
+        "addressid" : 10000,
+        "uuid"      : "[users-uuid]"
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you should give, also if the user was not logged in!
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
+```
+### user data push
+
+In the case, that a user has been logged in to a website before and there are changes in the user data we sent, a websites receives user data updates.
+So the website may use correct email address for notifications, if needed.
+
+```
+### Request:
+{
+    "method": "radisso.userDataPush",
+    "id": "[uuid]",
+    "params": {
+        "user"      : {
+            "uuid"        : "[uuid]",
+            "addressid"   : 10000,
+            "mail"        : "max@mustermann.de",
+            "pass"        : "passwort",
+            "sex"         : "F",
+            "salutation"  : "Frau",
+            "title"       : "Dr.",
+            "firstname"   : "Max",
+            "lastname"    : "Mustermann",
+            "birthdate"   : "1977-12-03",
+            "company"     : "urbanstudio GmbH",
+            "department"  : "Programmierung",
+            "memberof"    : [
+                {
+                    "name"    : "DRG",
+                    "number"  : 500,
+                    "in"      : "2012-01-01",
+                    "out"     : "",
+                    "active"  : 1
+                },
+                {
+                    "name"    : "DGMP",
+                    "number"  : 836,
+                    "in"      : "2015-01-01",
+                    "out"     : "2018-12-31",
+                    "active"  : 0
+                }
+            ],
+            "agmemberof"    : [
+                {
+                    "name"    : ""AG Physik und Technik in der bildgebende"",
+                    "id"      : 4
+                },
+                {
+                    "name"    : "FFZ",
+                    "id"      : 17
+                }
+            ],
+            "participatingids"    : [
+                "BASIC",
+                "CONRAD-RD2"
+            ]
+        }
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you should give in any case, also if the user is absent in your system!
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
+```
