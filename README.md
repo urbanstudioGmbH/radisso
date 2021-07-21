@@ -402,12 +402,30 @@ TODO
 
 This section is for websites that implements radisso for user auth!
 
-At this time there are no methods used by websites.
-
 If you are missing a method, that could be used by a website communication with radisso, please open a feature request ticket here.
 
+### kill user session
+
+Website sends hook that user will logout.
 ```
-TODO 
+### Request
+{
+    "method": "radisso.killUserSession", 
+    "id": "[uuid]",
+    "params": {
+        "addressid" : 10000,
+        "uuid"      : "[users-uuid]"
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you will receive!
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
 ```
 
 ## 3 Endpoints in API of website
@@ -425,7 +443,7 @@ If user has enabled 2FA, the request is sent after the 2FA check.
 ```
 ### Request:
 {
-    "method": "radisso.createUserSession",
+    "method": "website.createUserSession",
     "id": "[uuid]",
     "params": {
         "originUrl" : "https://beispieldomain.de/test/?abc=def",
@@ -511,7 +529,7 @@ On user logout all websites will receive a request to kill the actual session fo
 ```
 ### Request:
 {
-    "method": "radisso.killUserSession", 
+    "method": "website.killUserSession", 
     "id": "[uuid]",
     "params": {
         "addressid" : 10000,
@@ -536,7 +554,7 @@ So the website may use correct email address for notifications, if needed.
 ```
 ### Request:
 {
-    "method": "radisso.userDataPush",
+    "method": "website.userDataPush",
     "id": "[uuid]",
     "params": {
         "user"      : {
