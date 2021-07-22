@@ -403,6 +403,29 @@ Send only one users password change!
     "id" : "1"
 }
 ```
+### deactivate user push
+
+Users that are not active in the system of data provider will not send through user push, radisso deactivate users that are not sent but sent before!
+If a user must not login urgently, use this method.
+```
+### Request:
+{
+    "method": "data.deactivateUser", 
+    "id": "[uuid]",
+    "params": {
+        "addressid"   : 10000
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "1"
+}
+```
 ## 3 Endpoints in API of data provider
 
 This section is only for verified data providers!
