@@ -131,7 +131,7 @@ You need to save the id locally, as all other API requests need uuid as id
         "state"    : "verified",
         "api" : {
             "endPoint"  : "https://[our-api-domain]:[port]/[path]",
-            "pubKeyDl"  : "https://[our-api-domain]/[appname].pub"
+            "pubKeyDl"  : "https://[our-api-domain]/radisso.pub"
         },
         "loginEnpoints" : [
             {
