@@ -73,8 +73,8 @@ The API endpoint for the ```onboarding``` is ```https://api.radisso.de/onboardin
 
 1. Request onboarding
 
-The appname must be unique, you will need this later.
-```type``` may have value "```website```" or "```data```, where "```website```" stands for website that provides login and "```data```" stands for data provider
+The "```appname```" must be unique, you will need this later.
+```type``` may have value "```website```" or "```data```", where "```website```" stands for website that provides login and "```data```" stands for data provider
 
 #### Send following request for onboarding
 ```
@@ -118,9 +118,9 @@ The complete request body will be encrypted. For processing you need to decrypt 
 
 ##### If your request has been verified
 
-```loginEnpoints``` will only be deliverd if ```type``` == ```website``` .
+"```loginEnpoints```" will only be deliverd if "```type```" is "```website```" .
 
-You need to save the id locally, as all other API requests need uuid as id
+You need to save the id locally, as all other API requests need this your personal uuid as id
 ```
 {
     "method": "radisso.onboardingVerification", 
@@ -171,7 +171,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 (Don't forget to send your ```uuid```as id
 ```
 {
-    "method": "onboarding.removeDomains", 
+    "method": "partner.removeDomains", 
     "id": "[uuid]", 
     "params": {
         "domains": [
@@ -187,7 +187,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 (Don't forget to send your ```uuid```as id
 ```
 {
-    "method": "onboarding.addDomains", 
+    "method": "partner.addDomains", 
     "id": "[uuid]", 
     "params": {
         "domains": [
@@ -202,7 +202,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 (Don't forget to send your ```uuid```as id
 ```
 {
-    "method": "onboarding.updatePerson", 
+    "method": "partner.updatePerson", 
     "id": "[uuid]", 
     "params": {
         "person"  : {
@@ -219,7 +219,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 (Don't forget to send your ```uuid```as id
 ```
 {
-    "method": "onboarding.updateEndpoint", 
+    "method": "partner.updateEndpoint", 
     "id": "[uuid]", 
     "params": {
         "endPoint"     : "https://[your-api-domain]:[port]/[path]",
@@ -232,7 +232,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 (Don't forget to send your ```uuid```as id
 ```
 {
-    "method": "onboarding.updatePubKey", 
+    "method": "partner.updatePubKey", 
     "id": "[uuid]", 
     "params": {
         "pubKeyDl"     : "https://[your-api-domain]/[appname].pub",
@@ -500,8 +500,7 @@ Website sends hook that user will logout.
     "method": "radisso.killUserSession", 
     "id": "[uuid]",
     "params": {
-        "addressid" : 10000,
-        "uuid"      : "[users-uuid]"
+        "addressid" : 10000
     },
     "jsonrpc": "2.0"
 }
@@ -575,7 +574,11 @@ If user has enabled 2FA, the request is sent after the 2FA check.
                     "id"      : 17
                 }
             ],
-            "participatingids"    : [
+            "participatingevents"    : [
+                "2021RD",
+                "2022RD"
+            ],
+            "participatingconrad"    : [
                 "BASIC",
                 "CONRAD-RD2"
             ]
@@ -589,11 +592,11 @@ If user has enabled 2FA, the request is sent after the 2FA check.
 {
     "jsonrpc" : "2.0",
     "result" : {
-        "redirectUrl"   : "https://beispieldomain.de/test/?abc=def&your-key=[users-uuid-or-what-ever-you-like]",
-        "token"         : "[users-uuid]",
+        "redirectUrl"   : "https://beispieldomain.de/test/?abc=def&token=[token]",
+        "token"         : "[token]",
         "login"         : true
     },
-    "id" : "1"
+    "id" : "[partner-uuid]"
 }
 ```
 ```
@@ -714,6 +717,14 @@ Staging-Main-Login-Url:   https://dev.radisso.de/
 The Staging system will be available on the end of July 2021
 
 ## Changelog
+
+### [0.0.4] - 2021-07-29
+
+#### Changed
+- changed method prefix for partner methods
+- removed participatingids from user objects
+- added participatingevents as array to user objects
+- added participatingconrad as array to user objects
 
 ### [0.0.3] - 2021-07-21
 
