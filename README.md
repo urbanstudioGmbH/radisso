@@ -284,7 +284,7 @@ This section is only for verified data providers!
                 ],
                 "agmemberof"    : [
                     {
-                        "name"    : ""AG Physik und Technik in der bildgebende"",
+                        "name"    : "AG Physik und Technik in der bildgebende",
                         "id"      : 4
                     },
                     {
@@ -292,7 +292,11 @@ This section is only for verified data providers!
                         "id"      : 17
                     }
                 ],
-                "participatingids"    : [
+                "participatingevents"    : [
+                    "2021RD",
+                    "2022RD"
+                ],
+                "participatingconrad"    : [
                     "BASIC",
                     "CONRAD-RD2"
                 ]
@@ -352,7 +356,7 @@ Send only users with changes!
                 ],
                 "agmemberof"    : [
                     {
-                        "name"    : ""AG Physik und Technik in der bildgebende"",
+                        "name"    : "AG Physik und Technik in der bildgebende",
                         "id"      : 4
                     },
                     {
@@ -360,7 +364,11 @@ Send only users with changes!
                         "id"      : 17
                     }
                 ],
-                "participatingids"    : [
+                "participatingevents"    : [
+                    "2021RD",
+                    "2022RD"
+                ],
+                "participatingconrad"    : [
                     "BASIC",
                     "CONRAD-RD2"
                 ]
