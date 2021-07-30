@@ -107,7 +107,7 @@ You will receive a response like
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 #### After a review you will receive a request
@@ -124,7 +124,7 @@ You need to save the id locally, as all other API requests need this your person
 ```
 {
     "method": "radisso.onboardingVerification", 
-    "id": "[uuid]", 
+    "id": "[partner-uuid]", 
     "params": {
         "appname" : "YOUR-APP-NAME",
         "type"    : "website",
@@ -151,7 +151,7 @@ You need to save the id locally, as all other API requests need this your person
 ```
 {
     "method": "radisso.onboardingVerification", 
-    "id": "[uuid]", 
+    "id": "[partner-uuid]", 
     "params": {
         "appname" : "YOUR-APP-NAME",
         "type"    : "website",
@@ -172,7 +172,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 ```
 {
     "method": "partner.removeDomains", 
-    "id": "[uuid]", 
+    "id": "[partner-uuid]", 
     "params": {
         "domains": [
             "domain1.de"
@@ -188,7 +188,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 ```
 {
     "method": "partner.addDomains", 
-    "id": "[uuid]", 
+    "id": "[partner-uuid]", 
     "params": {
         "domains": [
             "domain1.de"
@@ -203,7 +203,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 ```
 {
     "method": "partner.updatePerson", 
-    "id": "[uuid]", 
+    "id": "[partner-uuid]", 
     "params": {
         "person"  : {
             "name"     : "Max Mustermann",
@@ -220,7 +220,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 ```
 {
     "method": "partner.updateEndpoint", 
-    "id": "[uuid]", 
+    "id": "[partner-uuid]", 
     "params": {
         "endPoint"     : "https://[your-api-domain]:[port]/[path]",
     },
@@ -233,7 +233,7 @@ _Since you are verified, you must encrypt the request body with **our** PubKey t
 ```
 {
     "method": "partner.updatePubKey", 
-    "id": "[uuid]", 
+    "id": "[partner-uuid]", 
     "params": {
         "pubKeyDl"     : "https://[your-api-domain]/[appname].pub",
     },
@@ -250,7 +250,7 @@ This section is only for verified data providers!
 ### Request:
 {
     "method": "data.listPush", 
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
         "users": [
             {
@@ -311,7 +311,7 @@ This section is only for verified data providers!
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 ### User change push
@@ -322,7 +322,7 @@ Send only users with changes!
 ### Request:
 {
     "method": "data.changePush", 
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
         "users": [
             {
@@ -383,7 +383,7 @@ Send only users with changes!
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 
@@ -395,7 +395,7 @@ Send only one users password change!
 ### Request:
 {
     "method": "data.pwPush", 
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
         "addressid"   : 10000,
         "pass"        : "passwort"
@@ -408,7 +408,7 @@ Send only one users password change!
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 ### deactivate user push
@@ -419,7 +419,7 @@ If a user must not login urgently, use this method.
 ### Request:
 {
     "method": "data.deactivateUser", 
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
         "addressid"   : 10000
     },
@@ -431,7 +431,7 @@ If a user must not login urgently, use this method.
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 ## 3 Endpoints in API of data provider
@@ -448,7 +448,7 @@ Send only one users password change!
 ### Request:
 {
     "method": "data.pwPush", 
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
         "addressid"   : 10000,
         "pass"        : "passwort"
@@ -461,7 +461,7 @@ Send only one users password change!
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 
@@ -473,7 +473,7 @@ To request a user list push. *** Do not answer with a users list, instead send s
 ### Request:
 {
     "method": "data.requestUserListPush", 
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
     },
     "jsonrpc": "2.0"
@@ -484,7 +484,7 @@ To request a user list push. *** Do not answer with a users list, instead send s
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 ### Request one users whole data
@@ -506,7 +506,7 @@ Website sends hook that user will logout.
 ### Request
 {
     "method": "radisso.killUserSession", 
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
         "addressid" : 10000
     },
@@ -538,7 +538,7 @@ If user has enabled 2FA, the request is sent after the 2FA check.
 ### Request:
 {
     "method": "website.createUserSession",
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
         "originUrl" : "https://beispieldomain.de/test/?abc=def",
         "wsvars"    : "[base64encodedstring]",
@@ -617,7 +617,7 @@ If user has enabled 2FA, the request is sent after the 2FA check.
         "message"       : "You have not enough rights to show the content",
         "login"         : false
     },
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 
@@ -629,10 +629,9 @@ On user logout all websites will receive a request to kill the actual session fo
 ### Request:
 {
     "method": "website.killUserSession", 
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
-        "addressid" : 10000,
-        "uuid"      : "[users-uuid]"
+        "addressid" : 10000
     },
     "jsonrpc": "2.0"
 }
@@ -645,62 +644,151 @@ On user logout all websites will receive a request to kill the actual session fo
     "id" : "1"
 }
 ```
+
+### Find user
+
+Some website have special rights, they are able to search in users.
+At least one param musst be filled!
+"```company```" searches in "```company```" and "```department```"
+```
+### Request:
+{
+    "method": "website.killUserSession", 
+    "id": "[partner-uuid]",
+    "params": {
+        "addressid" : NULL,
+        "firstname" : "",
+        "lastname" : "",
+        "mail" : "",
+        "company": ""
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you should give, also if the user was not logged in!
+{
+    "jsonrpc" : "2.0",
+    "result" : {
+        "users" : [
+            {
+                "uuid"        : "[uuid]",
+                "addressid"   : 10000,
+                "mail"        : "max@mustermann.de",
+                "pass"        : "passwort",
+                "sex"         : "F",
+                "salutation"  : "Frau",
+                "title"       : "Dr.",
+                "firstname"   : "Max",
+                "lastname"    : "Mustermann",
+                "birthdate"   : "1977-12-03",
+                "company"     : "urbanstudio GmbH",
+                "department"  : "Programmierung",
+                "city"        : "Harzgerode",
+                "memberof"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 836,
+                        "in"      : "2015-01-01",
+                        "out"     : "2018-12-31",
+                        "active"  : 0
+                    }
+                ],
+                "agmemberof"    : [
+                    {
+                        "name"    : ""AG Physik und Technik in der bildgebende"",
+                        "id"      : 4
+                    },
+                    {
+                        "name"    : "FFZ",
+                        "id"      : 17
+                    }
+                ],
+                "participatingevents"    : [
+                    "2021RD",
+                    "2022RD"
+                ],
+                "participatingconrad"    : [
+                    "BASIC",
+                    "CONRAD-RD2"
+                ]
+            }
+        ]
+    },
+    "id" : "[partner-uuid]"
+}
+```
 ### user data push
 
 In the case, that a user has been logged in to a website before and there are changes in the user data we sent, a websites receives user data updates.
 So the website may use correct email address for notifications, if needed.
 
+!!! This method is not yet implemented in radisso but will in near future !!!
+
 ```
 ### Request:
 {
     "method": "website.userDataPush",
-    "id": "[uuid]",
+    "id": "[partner-uuid]",
     "params": {
-        "user"      : {
-            "uuid"        : "[uuid]",
-            "addressid"   : 10000,
-            "mail"        : "max@mustermann.de",
-            "pass"        : "passwort",
-            "sex"         : "F",
-            "salutation"  : "Frau",
-            "title"       : "Dr.",
-            "firstname"   : "Max",
-            "lastname"    : "Mustermann",
-            "birthdate"   : "1977-12-03",
-            "company"     : "urbanstudio GmbH",
-            "department"  : "Programmierung",
-            "city"        : "Harzgerode",
-            "memberof"    : [
-                {
-                    "name"    : "DRG",
-                    "number"  : 500,
-                    "in"      : "2012-01-01",
-                    "out"     : "",
-                    "active"  : 1
-                },
-                {
-                    "name"    : "DGMP",
-                    "number"  : 836,
-                    "in"      : "2015-01-01",
-                    "out"     : "2018-12-31",
-                    "active"  : 0
-                }
-            ],
-            "agmemberof"    : [
-                {
-                    "name"    : ""AG Physik und Technik in der bildgebende"",
-                    "id"      : 4
-                },
-                {
-                    "name"    : "FFZ",
-                    "id"      : 17
-                }
-            ],
-            "participatingids"    : [
-                "BASIC",
-                "CONRAD-RD2"
-            ]
-        }
+        "users" : [
+            {
+                "uuid"        : "[uuid]",
+                "addressid"   : 10000,
+                "mail"        : "max@mustermann.de",
+                "pass"        : "passwort",
+                "sex"         : "F",
+                "salutation"  : "Frau",
+                "title"       : "Dr.",
+                "firstname"   : "Max",
+                "lastname"    : "Mustermann",
+                "birthdate"   : "1977-12-03",
+                "company"     : "urbanstudio GmbH",
+                "department"  : "Programmierung",
+                "city"        : "Harzgerode",
+                "memberof"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 836,
+                        "in"      : "2015-01-01",
+                        "out"     : "2018-12-31",
+                        "active"  : 0
+                    }
+                ],
+                "agmemberof"    : [
+                    {
+                        "name"    : ""AG Physik und Technik in der bildgebende"",
+                        "id"      : 4
+                    },
+                    {
+                        "name"    : "FFZ",
+                        "id"      : 17
+                    }
+                ],
+                "participatingevents"    : [
+                    "2021RD",
+                    "2022RD"
+                ],
+                "participatingconrad"    : [
+                    "BASIC",
+                    "CONRAD-RD2"
+                ]
+            }
+        ]
     },
     "jsonrpc": "2.0"
 }
@@ -710,7 +798,7 @@ So the website may use correct email address for notifications, if needed.
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
-    "id" : "1"
+    "id" : "partner-uuid"
 }
 ```
 ## 4 Test your implementation
