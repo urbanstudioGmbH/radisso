@@ -48,6 +48,14 @@ Add a content type header for each request. The content type is always "applicat
 5. if login is true, user gets redirected
 6. if login is false, user gets message and then redirected
 
+On Login request redirect user to radisso:
+
+https://[login-enpoint]/sso/[special-encoded-origin]/[optional-special-encoded-apienpoint]
+
+Login-Endpoints will be sensitive by MANDANT (But there is one without MANDANT).
+
+You'll receive all available MANDANT login endpoints uppon verification in onboarding process.
+
 
 ## 1 Key pair generation
 
@@ -819,6 +827,7 @@ The Staging system will be available on the end of July 2021
 #### Changed
 - Added Demo Wrapper Class 
 - Added some Demo files to show Wrapper usage
+- Added Information of optional param on Login request
 
 ### [0.0.4] - 2021-07-29
 
