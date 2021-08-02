@@ -1,0 +1,97 @@
+[
+    {
+        "addressid"   : 10000,
+        "mail"        : "max@mustermann.de",
+        "pass"        : "passwort",
+        "sex"         : "M",
+        "salutation"  : "Herr",
+        "title"       : "Dr.",
+        "firstname"   : "Max",
+        "lastname"    : "Mustermann",
+        "birthdate"   : "1977-12-03",
+        "company"     : "urbanstudio GmbH",
+        "department"  : "Programmierung",
+        "city"        : "Berlin",
+        "memberof"    : [
+            {
+                "name"    : "DRG",
+                "number"  : 500,
+                "in"      : "2013-01-01",
+                "out"     : "",
+                "active"  : 1
+            },
+            {
+                "name"    : "DGMP",
+                "number"  : 836,
+                "in"      : "2015-01-01",
+                "out"     : "2018-12-31",
+                "active"  : 0
+            }
+        ],
+        "agmemberof"    : [
+            {
+                "name"    : "AG Physik und Technik in der bildgebende",
+                "id"      : 4
+            },
+            {
+                "name"    : "FFZ",
+                "id"      : 17
+            }
+        ],
+        "participatingevents"    : [
+            "2021RD",
+            "2022RD"
+        ],
+        "participatingconrad"    : [
+            "BASIC",
+            "CONRAD-RD2"
+        ]
+    },
+    {
+        "addressid"   : 10001,
+        "mail"        : "gabi@mustermann.de",
+        "pass"        : "passwort",
+        "sex"         : "F",
+        "salutation"  : "Frau",
+        "title"       : "Prof. Dr.",
+        "firstname"   : "Gabriele",
+        "lastname"    : "Mustermann",
+        "birthdate"   : "1977-12-03",
+        "company"     : "urbanstudio GmbH",
+        "department"  : "Programmierung",
+        "city"        : "Berlin",
+        "memberof"    : [
+            {
+                "name"    : "DRG",
+                "number"  : 500,
+                "in"      : "2012-01-01",
+                "out"     : "",
+                "active"  : 1
+            },
+            {
+                "name"    : "DGMP",
+                "number"  : 836,
+                "in"      : "2020-01-01",
+                "out"     : "",
+                "active"  : 0
+            }
+        ],
+        "agmemberof"    : [
+            {
+                "name"    : "AG Physik und Technik in der bildgebende",
+                "id"      : 4
+            },
+            {
+                "name"    : "FFZ",
+                "id"      : 17
+            }
+        ],
+        "participatingevents"    : [
+            "2021RD"
+        ],
+        "participatingconrad"    : [
+            "BASIC",
+            "CONRAD-RD2"
+        ]
+    }
+]
