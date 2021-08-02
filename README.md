@@ -814,6 +814,12 @@ The Staging system will be available on the end of July 2021
 
 ## Changelog
 
+### [0.0.5] - 2021-08-02
+
+#### Changed
+- Added Demo Wrapper Class 
+- Added some Demo files to show Wrapper usage
+
 ### [0.0.4] - 2021-07-29
 
 #### Changed
