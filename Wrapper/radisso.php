@@ -9,4 +9,4 @@
  * @param string $redirecturl as base64 
  * 
  */
-\Radisso\Wrapper::checkToken($token, $redirecturl);
+\Radisso\Client::checkToken($token, $redirecturl);
