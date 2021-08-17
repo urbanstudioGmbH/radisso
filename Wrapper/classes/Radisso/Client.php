@@ -3,7 +3,6 @@
 //defines
 
 namespace Radisso{
-    use \UA\DateTime as DateTime;
     /**
      * Radisso client class
      */
