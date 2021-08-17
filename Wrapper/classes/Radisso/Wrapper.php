@@ -8,13 +8,13 @@ namespace Radisso{
      */
     class Wrapper {
         
-        protected static string $configFile = "radisso.json"; // Path to your config file
-        protected static ?object $cfg = NULL; // holds config from json
-        protected static array $callbacks = []; // array of callbacks
-        protected static string $uuid = ""; // own uuid saved in config
+        protected static $configFile = "radisso.json"; // Path to your config file
+        protected static $cfg = NULL; // holds config from json
+        protected static $callbacks = []; // array of callbacks
+        protected static $uuid = ""; // own uuid saved in config
 
-        private static string $radissoReceiveAESKeyEncrypted = ""; // dynamic AES Key will be set when request comes in 
-        private static string $radissoSendAESKeyEncrypted = ""; // dynamic AES Key will be set when request or response is sent
+        private static $radissoReceiveAESKeyEncrypted = ""; // dynamic AES Key will be set when request comes in 
+        private static $radissoSendAESKeyEncrypted = ""; // dynamic AES Key will be set when request or response is sent
         /**
          * Constructor function.
          * Reads config file defined in static::$configFile and write stdCass object in static::$cfg and partner uuid in static::$uuid;
