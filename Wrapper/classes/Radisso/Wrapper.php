@@ -4,19 +4,25 @@
 
 namespace Radisso{
     /**
-     * Radisso Wrapper class
+     * Wrapper class for Radisso Login Management
      */
     class Wrapper {
         
-        protected static string $configFile = "radisso.json";
-        protected static ?object $cfg = NULL;
+        protected static string $configFile = "radisso.json"; // Path to your config file
+        protected static ?object $cfg = NULL; // holds config from json
+        protected static array $callbacks = []; // array of callbacks
+        protected static string $uuid = ""; // own uuid saved in config
 
-        protected static string $uuid = "";
+        private static string $radissoReceiveAESKeyEncrypted = ""; // dynamic AES Key will be set when request comes in 
+        private static string $radissoSendAESKeyEncrypted = ""; // dynamic AES Key will be set when request or response is sent
         /**
          * Constructor function.
          * Reads config file defined in static::$configFile and write stdCass object in static::$cfg and partner uuid in static::$uuid;
          */
-        function __construct(){
+        function __construct($callbacks = null){
+            if(!is_null($callbacks) && is_array($callbacks)){
+                static::$callbacks = $callbacks;
+            }
             if(file_exists(static::$configFile)){
                 $cfgfile = file_get_contents(static::$configFile);
                 if($cfgfile){
@@ -29,25 +35,46 @@ namespace Radisso{
             }
         }
         /**
-         * Demo function check token and login user when user is redirected to website
+         * Method buildLoginUrl
          *
-         * @param string $token
-         * @param string $redirectUrl
+         * @param string $mandant
+         * @param ?string $origin
+         * @param ?string $endpoint
          * @return void
          */
-        public static function checkToken(string $token = NULL, string $redirectUrl = NULL){
-            $time = new DateTime();
-            /**
-             * Check the token you've been given to radisso
-            * Magic needed for individual rights of the user.
-            * May the user is registered for an event or is member of mandant?
-            * Do this before set the user as logged in in you system.
-            */
-            $_SESSION["UAuser"] = $user->id;
-            $redirectUrl = base64_decode($redirectUrl)."/";
-            uaRedirect($redirectUrl);
+        public static function buildLoginUrl(string $mandant = "NONE", string $origin = null, string $endpoint = null){
+            $instance = new static();
+            $mandant = strtoupper($mandant);
+            if (isset($instance::$cfg->loginEndpoints[$mandant])) {
+                $url = $instance::$cfg->loginEndpoints[$mandant];
+            }else{
+                $url = $instance::$cfg->loginEndpoints["NONE"];
+            }
+            if(!is_null($origin) && $origin){
+                $url .= $instance::usBase64encode($origin)."/";
+            }else{
+                $origin = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                $url .= $instance::usBase64encode($origin)."/";
+            }
+            if(!is_null($endpoint) && $endpoint){
+                $url .= $instance::usBase64encode($endpoint)."/";
+            }
+            return $url;
         }
 
+        /**
+         * Method doCallback
+         * 
+         * calls a predefined callback function
+         *
+         * @param string $callback
+         * @param stdClass $data
+         * @return mixed value
+         */
+        public function doCallback(string $callback, object $data){
+            if(!isset(static::$callbacks[$callback])) return false;
+            return call_user_func(static::$callbacks[$callback], $data);
+        }
         /**
          * Undocumented function
          *
@@ -205,17 +232,36 @@ namespace Radisso{
         }
         /* Request Methods Website only --- end ---*/
         
+        public static function searchUser(stdClass $userdata){
+            $params = new stdClass();
+            $params = $userdata;
+            $instance = new static();
+            $result = $instance->SendRequestToRadisso("website.findUser", $params);
+            if (isset($result->users) && is_array($result->users)) {
+                $udata = $result->users;
+                $udata->radissoUUID = $udata->uuid;
+                unset($udata->uuid);
+                return $udata;
+            }
+            return NULL;
+        }
+
         /**
-         * Undocumented function
+         * Method processIncomingRequest
+         * 
+         * handles all incoming requests
          *
          * @param mixed $input
          * @return void
          */
         public function processIncomingRequest($input = null){
-            $input = $this->privateKeyDecrypt($input);
+            if(isset($_SERVER["HTTP_X_UA_BEARER"]) && !empty($_SERVER["HTTP_X_UA_BEARER"])){
+                static::$radissoReceiveAESKeyEncrypted = $_SERVER["HTTP_X_UA_BEARER"];
+            }
+            $input = $this->aesDecryption($input);
 
             if (!$input || !$input->method || is_null($input)) {
-                $this->sendErrorResponse(true, uniqid(), ["code" => 404, "message" => "method not found", "input" => $input]);
+                $this->sendErrorResponse(false, uniqid(), ["code" => 404, "message" => "method not found", "input" => $input]);
             }
             if($input->id != static::$uuid){
                 $this->sendErrorResponse(false, uniqid(), ["code" => 403, "message" => "not allowed"]);
@@ -276,7 +322,7 @@ namespace Radisso{
 
                 case (substr($input->method, 0, 4) == "data"):
                     $method = substr($input->method,5);
-                    if(!$partner->id || !$partner->active || !$partner->verified){
+                    if($input->id != static::$uuid){
                         $this->sendErrorResponse(false, $input->id, ["code" => 403, "message" => "partner not allowed"]);
                     }else{
                         $process = $this->processDataRequest($method, $input->params);
@@ -310,15 +356,8 @@ namespace Radisso{
             if(!ctype_alnum($method)) return false;
             switch($method){
                 case "requestUserListPush":
-                    // $data is empty.
-                    // your code here that you may send data.userListPush request to radisso
-                break;
-
-                case "pwPush":
-                    /**
-                     * $data holds addressid and pass
-                     * do your magic to update Password in your database
-                     */
+                case "pwPush":    
+                    return $this->doCallback($method, $data);
                 break;
 
                 default:
@@ -339,91 +378,29 @@ namespace Radisso{
             if(!ctype_alnum($method)) return false;
             switch($method){
                 case "userDataPush":
-                    if(is_object($data->users)){
-                        /**
-                         * Do your magic to update your user objects
-                         * $data->users is an array.
-                         * identify user by addressid of user object
-                         */
-                    }else{
-                        return "no valid params";
-                    }
+                case "killUserSession":
+                    return $this->doCallback($method, $data);
                 break;
 
                 case "createUserSession":
-                    //if((!isset($data->originUrl) || empty($data->originUrl)) || (!isset($data->user) || !$data->user->addressid)){
                     if((!isset($data->originUrl) || empty($data->originUrl)) || (!isset($data->user))){
-                        return $this->sendErrorResponse(false, $input->id, ["code" => 500, "message" => "data could not been saved"]);
+                        return $this->sendErrorResponse(false, static::$uuid, ["code" => 500, "message" => "data could not been saved"]);
                     }
-                    /**
-                     * - find or add user
-                     * - create a backgroud session
-                     * - create token for identify user when user is redirected
-                     * - create redirect url (must include the token)
-                     * - send response
-                     */
-                    //$user = User::getByMail($data->user->mail);
-                    $logeedin = true; // bool true|false
-                    $result = new stdClass();
-                    $pu = parse_url(base64_decode($data->originUrl)); // always base64 encoded
-                    $result->redirectUrl = "https://your-redirect-url.de/?token=your-token&redirectUrl=the-orrigin-url";
-                    $result->login = true;
-                    if(!$loggedin){
-                        $result->message = "could not write Session";
+                    $result = $this->doCallback("createUserSession", $data);
+                    if(is_object($result)){
+                        $this->sendResponse(true, static::$uuid, $result);
+                    }else{
+                        return $result;
                     }
-                    $result->token = $token;
-                    $this->sendResponse(true, static::$uuid, $result);
                 break;
-
-                case "killUserSession":
-                    /**
-                     * Do your magic to kill the background session
-                     */
-                    $return = true; // return bool true|false
-                    return $return;
-                break;
-                
+              
                 default:
                     return "not allowed";
                 break;
             }
         }
         // helper functions
-        /**
-         * Encrypt function for global use, all requests and responses will be encrypted
-         *
-         * @param object $data
-         * @return base64 encoded data string
-         */
-        public function publicKeyEncrypt(object $data){
-            $json = json_encode($data);
-            $key = openssl_get_publickey(base64_decode(static::$cfg->radissoPublicKey));
-            $maxlength=117; $result = ""; $chunks = [];
-            while($json){
-                $input = substr($json, 0, $maxlength);
-                $json = substr($json, $maxlength);
-                $state = openssl_public_encrypt($input, $encData, $key, OPENSSL_PKCS1_OAEP_PADDING);
-                array_push($chunks, base64_encode($encData));
-            }
-            $result = implode("|||", $chunks);
-            return base64_encode($result);
-        }
-        /**
-         * Decrypt function for global use, all requests and responses need decryption
-         *
-         * @param string $encData
-         * @return void
-         */
-        public function privateKeyDecrypt(string $encData){
-            $key = openssl_get_privatekey(base64_decode(static::$cfg->localPrivateKey));
-            $source = base64_decode($encData);
-            $result = ''; $chunks = explode("|||", $source);
-            foreach($chunks AS $chunk){
-                $state = openssl_private_decrypt(base64_decode($chunk), $data, $key, OPENSSL_PKCS1_OAEP_PADDING);
-                $result .= $data;
-            }
-            return json_decode($result);
-        }
+        
 
         /**
          * Helper function for creating and sending request.
@@ -442,21 +419,87 @@ namespace Radisso{
             $pl->method = "$method";
             $pl->params = $params;
             $pl->id = static::$uuid;
-            //exit(print_r($pl,1));
-            $encData = $this->publicKeyEncrypt($pl, static::$cfg->radissoPublicKey);
+            $encData = $this->aesEncryption($pl);
             if($encData !== false){
                 $sent = $this->sendRequest($encData);
-                if(isset($sent->error)){
-                    return false;
-                }elseif(isset($sent->result) && $sent->result == "OK" && $method != "radisso.onboardingVerification"){
-                    return true;
-                }elseif(isset($sent->result) && isset($sent->result->state) && $method == "radisso.onboardingVerification"){
-                    return $sent->result;
-                }elseif(isset($sent->result) && isset($sent->result->users) && $method == "website.findUser"){
-                    return $sent->result;
+                if(is_object($sent)){
+                    if(isset($sent->error)){
+                        return false;
+                    }elseif(isset($sent->result) && $sent->result == "OK" && $method != "radisso.onboardingVerification"){
+                        return true;
+                    }elseif(isset($sent->result) && isset($sent->result->state) && $method == "radisso.onboardingVerification"){
+                        return $sent->result;
+                    }elseif(isset($sent->result) && isset($sent->result->users) && $method == "website.findUser"){
+                        return $sent->result;
+                    }
                 }
             }
             return false;
+        }
+
+        public function aesEncryption($data){
+            $json = json_encode($data);
+            $key =  openssl_random_pseudo_bytes(32);
+            static::$radissoSendAESKeyEncrypted = $this->publicKeyEncrypt($key);
+            $cipher = 'aes-256-gcm';
+            $iv_len = openssl_cipher_iv_length($cipher);
+            $tag_length = 16;
+            $iv = openssl_random_pseudo_bytes($iv_len);
+            $tag = ""; // will be filled by openssl_encrypt
+
+            $ciphertext = openssl_encrypt($json, $cipher, $key, OPENSSL_RAW_DATA, $iv, $tag, "", $tag_length);
+            $encrypted = base64_encode($iv.$ciphertext.$tag);
+            return $encrypted;
+        }
+
+        public function aesDecryption($data){
+            $key = $this->privateKeyDecrypt(static::$radissoReceiveAESKeyEncrypted);
+            $key = base64_decode($key);
+            $encrypted = base64_decode($data);
+            $cipher = 'aes-256-gcm';
+            $iv_len = openssl_cipher_iv_length($cipher);
+            $tag_length = 16;
+            $iv = substr($encrypted, 0, $iv_len);
+            $ciphertext = substr($encrypted, $iv_len, -$tag_length);
+            $tag = substr($encrypted, -$tag_length);
+            $decrypted = openssl_decrypt($ciphertext, $cipher, $key, OPENSSL_RAW_DATA, $iv, $tag);
+            return json_decode($decrypted);
+        }
+        /**
+         * Encrypt function for global use, all requests and responses will be encrypted
+         *
+         * @param object $data
+         * @return base64 encoded data string
+         */
+        public function publicKeyEncrypt($aesKey){
+            $data = base64_encode($aesKey);
+            $key = openssl_get_publickey(base64_decode(static::$cfg->radissoPublicKey));
+            $maxlength=117; $result = ""; $chunks = [];
+            while($data){
+                $input = substr($data, 0, $maxlength);
+                $data = substr($data, $maxlength);
+                $state = openssl_public_encrypt($input, $encData, $key, OPENSSL_PKCS1_OAEP_PADDING);
+                array_push($chunks, base64_encode($encData));
+            }
+            $result = implode("|||", $chunks);
+            return base64_encode($result);
+        }
+        /**
+         * Decrypt function for global use, all requests and responses need decryption
+         *
+         * @param string $encData
+         * @return void
+         */
+        public function privateKeyDecrypt(string $encData){
+            $key = openssl_get_privatekey(base64_decode(static::$cfg->localPrivateKey));
+            $source = base64_decode($encData);
+            $result = '';
+            $chunks = explode("|||", $source);
+            foreach($chunks AS $chunk){
+                $state = openssl_private_decrypt(base64_decode($chunk), $data, $key, OPENSSL_PKCS1_OAEP_PADDING);
+                $result .= $data;
+            }
+            return $result;
         }
         /**
          * Sends request to any given URL, standard Url is the radissoApiEndpoint
@@ -472,16 +515,28 @@ namespace Radisso{
             }else{
                 $ch = \curl_init($url);
             }
+            $headers = [];
+            array_push($headers, "Content-Type: application/json; charset=utf-8");
+            // When content is aes encrypted, the HEADER X-UA-BEARER must be sent.
+            // It holds the RSA encrypted key for the payload
+            if (!empty(static::$radissoSendAESKeyEncrypted)) {
+                array_push($headers, "X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
+            }
+            \curl_setopt( $ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4 ); // for performance reasons
             \curl_setopt( $ch, CURLOPT_POST, true);
             \curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
-            \curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+            \curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
             \curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false);
             \curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
             # Return response instead of printing.
+            \curl_setopt( $ch, CURLOPT_HEADER, 1);
             \curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
             # Send request.
             $result = curl_exec($ch);
-            //$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $header = substr($result, 0, $header_size);
+            $body = substr($result, $header_size);
+            
             if($errno = \curl_errno($ch)) {
                 $error_message = \curl_strerror($errno);
                 $return = new stdClass();
@@ -489,22 +544,34 @@ namespace Radisso{
                 return $return;
             }
             \curl_close($ch);
-            if(json_decode($result) != NULL){
-                return json_decode($result);
+            $headers = $this->get_headers_from_curl_response($header);
+            if(isset($headers["X-UA-BEARER"]) && !empty($headers["X-UA-BEARER"])){
+                static::$radissoReceiveAESKeyEncrypted = trim($headers["X-UA-BEARER"]);
+                $decrypted = $this->aesDecryption($body);
+                if (json_decode($decrypted) != null) {
+                    return json_decode($decrypted);
+                }
+                return $decrypted;
+            }else{
+                if (json_decode($result) != null) {
+                    return json_decode($body);
+                }
             }
-            return $this->privateKeyDecrypt($result);
+            return $result;
         }
         /**
-         * Undocumented function
+         * Method sendResponse
+         * 
+         * method sends successfull response w/wo result params
          *
          * @param boolean $encrypt
-         * @param [type] $uuid
-         * @param [type] $result
+         * @param ?uuid $uuid
+         * @param ?stdClass $result
          * @return void
          */
         public function sendResponse(bool $encrypt = false, $uuid = null, $result = null){
             if(is_null($result)) $result = "OK";
-            $pl = new stdClass();
+            $pl = new \stdClass();
             $pl->jsonrpc = "2.0";
             $pl->result = $result;
             $pl->id = static::$uuid;
@@ -513,21 +580,27 @@ namespace Radisso{
                 echo json_encode($pl);
             }else{
                 header('Content-type: text/plain');
-                echo $this->publicKeyEncrypt($pl);
+                $payload = $this->aesEncryption($pl);
+                if (!empty(static::$radissoSendAESKeyEncrypted)) {
+                    header("X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
+                }
+                echo $payload;
             }
             die();
         }
         /**
-         * Undocumented function
+         * Method sendErrorResponse
+         * 
+         * method sends an error response to a recieved request
          *
          * @param boolean $encrypt
-         * @param [type] $uuid
-         * @param [type] $error
+         * @param ?uuid $uuid
+         * @param ?string $error
          * @return void
          */
         public function sendErrorResponse(bool $encrypt = false, $uuid = null, $error = null){
             if(is_null($error)) $error = ["code" => 500, "message" => "error not specified"];
-            $pl = new stdClass();
+            $pl = new \stdClass();
             $pl->jsonrpc = "2.0";
             $pl->error = $error;
             $pl->id = static::$uuid;
@@ -536,10 +609,36 @@ namespace Radisso{
                 echo json_encode($pl);
             }else{
                 header('Content-type: text/plain');
-                echo $this->publicKeyEncrypt($pl);
+                $payload = $this->aesEncryption($pl);
+                if (!empty(static::$radissoSendAESKeyEncrypted)) {
+                    header("X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
+                }
+                echo $payload;
             }
             die();
         }
-        
+
+        public function get_headers_from_curl_response($response_headers){
+            $headers = [];
+            foreach (explode("\r\n", $response_headers) AS $i => $line) {
+                if ($i === 0) {
+                    $headers['HTTP_CODE'] = $line;
+                } else {
+                    list($key, $value) = explode(': ', $line);
+                    $headers[strtoupper($key)] = $value;
+                }
+            }
+            return $headers;
+        }
+
+        public static function usBase64encode(string $string){
+            $str = base64_encode($string);
+            return urlencode($str);
+        }
+
+        public static function uaBase64decode(string $string){
+            $str = urldecode($string);
+            return base64_decode($str);
+        }
     }
 }
