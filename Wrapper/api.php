@@ -24,7 +24,7 @@ $radissoCallbacks = [
     "pwPush"                => ["\Radisso\Client", "pwPush"]
 ];
 
-$radisso = new \Radisso\Wrapper;
+$radisso = new \Radisso\Wrapper($radissoCallbacks);
 // echo the result is sending the encoded response
 echo $radisso->processIncomingRequest($inputData);
 
