@@ -130,18 +130,18 @@ namespace Radisso{
          */
         /* Request Methods for websites and data providers --- begin ---*/
         public function onboardingRequest($data = null) {
-            $payload = new stdClass();
+            $payload = new \stdClass();
             $payload->jsonrpc = "2.0";
             $payload->id = static::$uuid;
             $payload->method = "onboarding.requestOnboarding";
-            $payload->params = new stdClass();
+            $payload->params = new \stdClass();
             $payload->params->appname = $data->name;
             $payload->params->type = $data->type;
-            $payload->params->person = new stdClass();
+            $payload->params->person = new \stdClass();
             $payload->params->person->name = $data->personname;
             $payload->params->person->email = $data->personmail;
             $payload->params->person->phone = $data->personphone;
-            $payload->params->api = new stdClass();
+            $payload->params->api = new \stdClass();
             $payload->params->api->endPoint = $data->ApiUrl;
             $payload->params->api->pubKeyDl = $data->PublicKeyUrl;
             $payload->params->domains = $data->domains;
@@ -162,31 +162,31 @@ namespace Radisso{
 
         public function addDomains(array $domains = []){
             if(!count($domains)) return false;
-            $params = new stdClass();
+            $params = new \stdClass();
             $params->domains = $domains;
             return $this->SendRequestToRadisso("partner.addDomains", $params);
         }
         public function removeDomains(array $domains = []){
             if(!count($domains)) return false;
-            $params = new stdClass();
+            $params = new \stdClass();
             $params->domains = $domains;
             return $this->SendRequestToRadisso("partner.removeDomains", $params);
         }
-        public function updatePerson(stdClass $person){
-            $params = new stdClass();
+        public function updatePerson(\stdClass $person){
+            $params = new \stdClass();
             $params->person = $person;
             return $this->SendRequestToRadisso("partner.updatePerson", $params);
         }
         public function updateEndpoint(string $endPoint = ""){
             if(empty($endPoint)) return false;
-            $params = new stdClass();
+            $params = new \stdClass();
             $params->endPoint = $endPoint;
             return $this->SendRequestToRadisso("partner.updateEndpoint", $params);
         }
         public function updatePubKey(string $pubKeyDl = ""){
             if(empty($pubKeyDl)) return false;
             if(!file_get_contents($pubKeyDl)) return false;
-            $params = new stdClass();
+            $params = new \stdClass();
             $params->pubKeyDl = $pubKeyDl;
             return $this->SendRequestToRadisso("partner.updatePubKey", $params);
         }
@@ -194,46 +194,46 @@ namespace Radisso{
         /* Request Methods data providers only --- begin ---*/
         public function listPush(array $users = []){ // array of user stdClass objects
             if(!count($users)) return false;
-            $params = new stdClass();
+            $params = new \stdClass();
             $params->users = $users;
             return $this->SendRequestToRadisso("data.listPush", $params);
         }
 
         public function changePush(array $users = []){ // array of user stdClass objects
             if(!count($users)) return false;
-            $params = new stdClass();
+            $params = new \stdClass();
             $params->users = $users;
             return $this->SendRequestToRadisso("data.changePush", $params);
         }
 
-        public function pwPush(stdClass $userdata){ // stdClass object
-            $params = new stdClass();
+        public function pwPush(\stdClass $userdata){ // stdClass object
+            $params = new \stdClass();
             $params->addressid = $userdata->addressid;
             $params->pass = $userdata->pass;
             return $this->SendRequestToRadisso("data.pwPush", $params);
         }
 
         public function deactivateUser(int $addressid){ // 
-            $params = new stdClass();
+            $params = new \stdClass();
             $params->addressid = $addressid;
             return $this->SendRequestToRadisso("data.deactivateUser", $params);
         }
         /* Request Methods data providers only --- end ---*/
         /* Request Methods Website only --- begin ---*/
         public function killUserSession(int $addressid){ // stdClass object
-            $params = new stdClass();
+            $params = new \stdClass();
             $params->addressid = $addressid;
             return $this->SendRequestToRadisso("website.killUserSession", $params);
         }
-        public function findUser(stdClass $userdata){ // stdClass object
-            $params = new stdClass();
+        public function findUser(\stdClass $userdata){ // stdClass object
+            $params = new \stdClass();
             $params = $userdata;
             return $this->SendRequestToRadisso("website.findUser", $params);
         }
         /* Request Methods Website only --- end ---*/
         
-        public static function searchUser(stdClass $userdata){
-            $params = new stdClass();
+        public static function searchUser(\stdClass $userdata){
+            $params = new \stdClass();
             $params = $userdata;
             $instance = new static();
             $result = $instance->SendRequestToRadisso("website.findUser", $params);
@@ -413,8 +413,8 @@ namespace Radisso{
          */
         public function SendRequestToRadisso(String $method = null, object $params = null) {
             if(is_null($method)) return false;
-            if(is_null($params)) $params = new stdClass();
-            $pl = new stdClass();
+            if(is_null($params)) $params = new \stdClass();
+            $pl = new \stdClass();
             $pl->jsonrpc = "2.0";
             $pl->method = "$method";
             $pl->params = $params;
@@ -539,7 +539,7 @@ namespace Radisso{
             
             if($errno = \curl_errno($ch)) {
                 $error_message = \curl_strerror($errno);
-                $return = new stdClass();
+                $return = new \stdClass();
                 $return->error = "cURL error ({$errno}):\n {$error_message}";
                 return $return;
             }
