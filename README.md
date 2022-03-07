@@ -277,6 +277,7 @@ This section is only for verified data providers!
                 "streetno"    : "1b",
                 "zip"         : "12345",
                 "city"        : "Harzgerode",
+                "country"     : "DE",
                 "phone"       : "012345678910",
                 "memberof"    : [
                     {
@@ -353,6 +354,7 @@ Send only users with changes!
                 "streetno"    : "1b",
                 "zip"         : "12345",
                 "city"        : "Harzgerode",
+                "country"     : "DE",
                 "phone"       : "012345678910",
                 "memberof"    : [
                     {
@@ -575,6 +577,7 @@ If user has enabled 2FA, the request is sent after the 2FA check.
             "streetno"    : "1b",
             "zip"         : "12345",
             "city"        : "Harzgerode",
+            "country"     : "DE",
             "phone"       : "012345678910",
             "memberof"    : [
                 {
@@ -708,6 +711,7 @@ At least one param musst be filled!
                 "streetno"    : "1b",
                 "zip"         : "12345",
                 "city"        : "Harzgerode",
+                "country"     : "DE",
                 "phone"       : "012345678910",
                 "memberof"    : [
                     {
@@ -780,6 +784,7 @@ So the website may use correct email address for notifications, if needed.
                 "streetno"    : "1b",
                 "zip"         : "12345",
                 "city"        : "Harzgerode",
+                "country"     : "DE",
                 "phone"       : "012345678910",
                 "memberof"    : [
                     {
@@ -845,7 +850,7 @@ The Staging system will be available on the end of July 2021
 ### [0.0.6] - 2022-03-07
 
 #### Changed
-- Added user data params in different Requests/Responses (street, streetno, zip, phone)
+- Added user data params in different Requests/Responses (street, streetno, zip, country, phone)
 
 ### [0.0.5] - 2021-08-02
 
