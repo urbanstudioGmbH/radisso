@@ -273,7 +273,11 @@ This section is only for verified data providers!
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
+                "street"      : "Musterstraße",
+                "streetno"    : "1b",
+                "zip"         : "12345",
                 "city"        : "Harzgerode",
+                "phone"       : "012345678910",
                 "memberof"    : [
                     {
                         "name"    : "DRG",
@@ -345,7 +349,11 @@ Send only users with changes!
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
+                "street"      : "Musterstraße",
+                "streetno"    : "1b",
+                "zip"         : "12345",
                 "city"        : "Harzgerode",
+                "phone"       : "012345678910",
                 "memberof"    : [
                     {
                         "name"    : "DRG",
@@ -563,7 +571,11 @@ If user has enabled 2FA, the request is sent after the 2FA check.
             "birthdate"   : "1977-12-03",
             "company"     : "urbanstudio GmbH",
             "department"  : "Programmierung",
+            "street"      : "Musterstraße",
+            "streetno"    : "1b",
+            "zip"         : "12345",
             "city"        : "Harzgerode",
+            "phone"       : "012345678910",
             "memberof"    : [
                 {
                     "name"    : "DRG",
@@ -692,7 +704,11 @@ At least one param musst be filled!
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
+                "street"      : "Musterstraße",
+                "streetno"    : "1b",
+                "zip"         : "12345",
                 "city"        : "Harzgerode",
+                "phone"       : "012345678910",
                 "memberof"    : [
                     {
                         "name"    : "DRG",
@@ -760,7 +776,11 @@ So the website may use correct email address for notifications, if needed.
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
+                "street"      : "Musterstraße",
+                "streetno"    : "1b",
+                "zip"         : "12345",
                 "city"        : "Harzgerode",
+                "phone"       : "012345678910",
                 "memberof"    : [
                     {
                         "name"    : "DRG",
@@ -821,6 +841,11 @@ Staging-Main-Login-Url:   https://dev.radisso.de/
 The Staging system will be available on the end of July 2021
 
 ## Changelog
+
+### [0.0.6] - 2022-03-07
+
+#### Changed
+- Added user data params in different Requests/Responses (street, streetno, zip, phone)
 
 ### [0.0.5] - 2021-08-02
 
