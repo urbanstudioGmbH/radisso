@@ -5,16 +5,17 @@
 namespace Radisso{
     /**
      * Wrapper class for Radisso Login Management
+     * @version 0.2.1
+     * @author Marian Feiler <mf@urbanstudio.de>
      */
     class Wrapper {
-        
-        protected static $configFile = "radisso.json"; // Path to your config file
-        protected static $cfg = NULL; // holds config from json
-        protected static $callbacks = []; // array of callbacks
-        protected static $uuid = ""; // own uuid saved in config
+        protected static string $configFile = "var/certs/radisso.json"; // Path to your config file
+        protected static ?object $cfg = NULL; // holds config from json
+        protected static array $callbacks = []; // array of callbacks
+        protected static string $uuid = ""; // own uuid saved in config
 
-        private static $radissoReceiveAESKeyEncrypted = ""; // dynamic AES Key will be set when request comes in 
-        private static $radissoSendAESKeyEncrypted = ""; // dynamic AES Key will be set when request or response is sent
+        private static string $radissoReceiveAESKeyEncrypted = ""; // dynamic AES Key will be set when request comes in 
+        private static string $radissoSendAESKeyEncrypted = ""; // dynamic AES Key will be set when request or response is sent
         /**
          * Constructor function.
          * Reads config file defined in static::$configFile and write stdCass object in static::$cfg and partner uuid in static::$uuid;
@@ -45,15 +46,26 @@ namespace Radisso{
         public static function buildLoginUrl(string $mandant = "NONE", string $origin = null, string $endpoint = null){
             $instance = new static();
             $mandant = strtoupper($mandant);
-            if (isset($instance::$cfg->loginEndpoints[$mandant])) {
-                $url = $instance::$cfg->loginEndpoints[$mandant];
-            }else{
-                $url = $instance::$cfg->loginEndpoints["NONE"];
+            //mail("mf@urbanstudio.de","cfg",print_r($instance::$cfg,1));
+            $noneep = ""; $url = "";
+            foreach ($instance::$cfg->loginEndpoints as $i => $ep) {
+                if ($ep->mandant == $mandant) {
+                    $url = $ep->url;
+                } elseif ($ep->mandant == "NONE") {
+                    $noneep = $ep->url;
+                }
             }
+/*            if(isset($instance::$cfg->loginEndpoints->{$mandant})){
+                $url = $instance::$cfg->loginEndpoints->{$mandant}->url;
+            }else{
+                $url = $instance::$cfg->loginEndpoints->NONE->url;
+            }*/
+            if(empty($url)) $url = $noneep;
+
             if(!is_null($origin) && $origin){
                 $url .= $instance::usBase64encode($origin)."/";
             }else{
-                $origin = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                $origin = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 $url .= $instance::usBase64encode($origin)."/";
             }
             if(!is_null($endpoint) && $endpoint){
@@ -153,8 +165,7 @@ namespace Radisso{
             }elseif(isset($sent->result) && $sent->result == "OK"){
                 // Save uuid for later use!!!
                 // uuid will be in $sent->id;
-                $sendid = explode(".", $sentid);
-                static::$cfg->uuid = $sentid[0];
+                static::$cfg->uuid = $sent->id;
                 $this->saveConfig();
                 return true;
             }
@@ -231,17 +242,34 @@ namespace Radisso{
             return $this->SendRequestToRadisso("website.findUser", $params);
         }
         /* Request Methods Website only --- end ---*/
-        
+        public static function userHash(\stdClass $userdata){
+            $params = new \stdClass();
+            $params = $userdata;
+            $instance = new static();
+            $result = $instance->SendRequestToRadisso("website.userHash", $params);
+            if (isset($result->hash) && $result->hash) {
+                return $result->hash;
+            }
+            return NULL;
+        }
         public static function searchUser(\stdClass $userdata){
             $params = new \stdClass();
             $params = $userdata;
             $instance = new static();
             $result = $instance->SendRequestToRadisso("website.findUser", $params);
             if (isset($result->users) && is_array($result->users)) {
-                $udata = $result->users;
-                $udata->radissoUUID = $udata->uuid;
-                unset($udata->uuid);
-                return $udata;
+                return $result->users;
+            }
+            return NULL;
+        }
+
+        public static function checkUser(\stdClass $userdata){
+            $params = new \stdClass();
+            $params = $userdata;
+            $instance = new static();
+            $result = $instance->SendRequestToRadisso("website.checkUser", $params);
+            if (isset($result->isUser)) {
+                return $result;
             }
             return NULL;
         }
@@ -259,7 +287,7 @@ namespace Radisso{
                 static::$radissoReceiveAESKeyEncrypted = $_SERVER["HTTP_X_UA_BEARER"];
             }
             $input = $this->aesDecryption($input);
-
+            //mail("mf@urbanstudio.de", "incomin request PANDA", print_r($input,1));
             if (!$input || !$input->method || is_null($input)) {
                 $this->sendErrorResponse(false, uniqid(), ["code" => 404, "message" => "method not found", "input" => $input]);
             }
@@ -327,16 +355,16 @@ namespace Radisso{
                     }else{
                         $process = $this->processDataRequest($method, $input->params);
                         if($process == true){
-                            $this->sendResponse(false, $partner->uuid);
+                            $this->sendResponse(true, $input->id);
                         }else{
                             if(is_string($process)){
                                 if($process == "not allowed"){
-                                    $this->sendErrorResponse(false, $input->id, ["code" => 401, "message" => "method not allowed"]);
+                                    $this->sendErrorResponse(true, $input->id, ["code" => 401, "message" => "method not allowed"]);
                                 }else{
-                                    $this->sendErrorResponse(false, $input->id, ["code" => 500, "message" => "$process"]);
+                                    $this->sendErrorResponse(true, $input->id, ["code" => 500, "message" => "$process"]);
                                 }
                             }else{
-                                $this->sendErrorResponse(false, $input->id, ["code" => 500, "message" => "data could not been saved"]);
+                                $this->sendErrorResponse(true, $input->id, ["code" => 500, "message" => "data could not been saved"]);
                             }
                         }
                     }
@@ -357,6 +385,8 @@ namespace Radisso{
             switch($method){
                 case "requestUserListPush":
                 case "pwPush":    
+                    // $data is empty.
+                    // your code here that you may send data.userListPush request to radisso
                     return $this->doCallback($method, $data);
                 break;
 
@@ -378,11 +408,21 @@ namespace Radisso{
             if(!ctype_alnum($method)) return false;
             switch($method){
                 case "userDataPush":
+                    $result = $this->doCallback("createUserSession", $data);
+                    if(is_object($result)){
+                        $this->sendResponse(true, static::$uuid, $result);
+                    }else{
+                        return $result;
+                    }
+                break;
+
                 case "killUserSession":
                     return $this->doCallback($method, $data);
                 break;
 
                 case "createUserSession":
+                    //mail("mf@urbanstudio.de", "wrapper createUserSession", (print_r($data,1)));
+                    //if((!isset($data->originUrl) || empty($data->originUrl)) || (!isset($data->user) || !$data->user->addressid)){
                     if((!isset($data->originUrl) || empty($data->originUrl)) || (!isset($data->user))){
                         return $this->sendErrorResponse(false, static::$uuid, ["code" => 500, "message" => "data could not been saved"]);
                     }
@@ -419,9 +459,14 @@ namespace Radisso{
             $pl->method = "$method";
             $pl->params = $params;
             $pl->id = static::$uuid;
+            //exit(print_r($pl,1));
             $encData = $this->aesEncryption($pl);
+            //mail("mf@urbanstudio.de", "radisso encryption failure", (print_r(static::$radissoSendAESKeyEncrypted,1)." - ".print_r($pl,1)." - ".$encData));
+            //$encData = json_encode($pl);
             if($encData !== false){
                 $sent = $this->sendRequest($encData);
+                //$sent = $this->sendRequest($pl);
+                //mail("mf@urbanstudio.de", "Check rec", "Method: ".print_r($sent,1));
                 if(is_object($sent)){
                     if(isset($sent->error)){
                         return false;
@@ -430,6 +475,10 @@ namespace Radisso{
                     }elseif(isset($sent->result) && isset($sent->result->state) && $method == "radisso.onboardingVerification"){
                         return $sent->result;
                     }elseif(isset($sent->result) && isset($sent->result->users) && $method == "website.findUser"){
+                        return $sent->result;
+                    }elseif(isset($sent->result) && isset($sent->result->users) && $method == "website.searchUser"){
+                        return $sent->result;
+                    }elseif(isset($sent->result) && $method == "website.checkUser"){
                         return $sent->result;
                     }
                 }
@@ -449,6 +498,7 @@ namespace Radisso{
 
             $ciphertext = openssl_encrypt($json, $cipher, $key, OPENSSL_RAW_DATA, $iv, $tag, "", $tag_length);
             $encrypted = base64_encode($iv.$ciphertext.$tag);
+            //mail("mf@urbanstudio.de", "wrapper encryption failure", (print_r(static::$radissoSendAESKeyEncrypted,1)." - ".print_r($data,1)));
             return $encrypted;
         }
 
@@ -463,6 +513,7 @@ namespace Radisso{
             $ciphertext = substr($encrypted, $iv_len, -$tag_length);
             $tag = substr($encrypted, -$tag_length);
             $decrypted = openssl_decrypt($ciphertext, $cipher, $key, OPENSSL_RAW_DATA, $iv, $tag);
+            //mail("mf@urbanstudio.de", "wrapper decryption failure", (print_r(static::$radissoReceiveAESKeyEncrypted,1)." - ".print_r($decrypted,1)));
             return json_decode($decrypted);
         }
         /**
@@ -482,6 +533,7 @@ namespace Radisso{
                 array_push($chunks, base64_encode($encData));
             }
             $result = implode("|||", $chunks);
+            //mail("mf@urbanstudio.de", "wrapper encryption failure", (print_r(base64_encode($aesKey),1)." - ".print_r($result,1)));
             return base64_encode($result);
         }
         /**
@@ -499,6 +551,8 @@ namespace Radisso{
                 $state = openssl_private_decrypt(base64_decode($chunk), $data, $key, OPENSSL_PKCS1_OAEP_PADDING);
                 $result .= $data;
             }
+            //mail("mf@urbanstudio.de", "radisso decryption failure 2", (print_r(base64_encode($result),1)));
+
             return $result;
         }
         /**
@@ -522,7 +576,7 @@ namespace Radisso{
             if (!empty(static::$radissoSendAESKeyEncrypted)) {
                 array_push($headers, "X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
             }
-            \curl_setopt( $ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4 ); // for performance reasons
+            \curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4 ); // for performance reasons
             \curl_setopt( $ch, CURLOPT_POST, true);
             \curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
             \curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
@@ -575,12 +629,14 @@ namespace Radisso{
             $pl->jsonrpc = "2.0";
             $pl->result = $result;
             $pl->id = static::$uuid;
+            //mail("mf@urbanstudio.de", "success response PANDA", print_r($pl,1));
             if(!$encrypt){
                 header('Content-type: application/json');
                 echo json_encode($pl);
             }else{
                 header('Content-type: text/plain');
                 $payload = $this->aesEncryption($pl);
+                //mail("mf@urbanstudio.de", "success response PANDA 2", print_r($payload,1));
                 if (!empty(static::$radissoSendAESKeyEncrypted)) {
                     header("X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
                 }
@@ -604,6 +660,7 @@ namespace Radisso{
             $pl->jsonrpc = "2.0";
             $pl->error = $error;
             $pl->id = static::$uuid;
+            //mail("mf@urbanstudio.de", "error response PANDA", print_r($pl,1));
             if(!$encrypt){
                 header('Content-type: application/json');
                 echo json_encode($pl);
