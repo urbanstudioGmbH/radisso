@@ -521,7 +521,7 @@ Website sends hook that user will logout.
 ```
 ### Request
 {
-    "method": "radisso.killUserSession", 
+    "method": "website.killUserSession", 
     "id": "[partner-uuid]",
     "params": {
         "addressid" : 10000
@@ -537,7 +537,113 @@ Website sends hook that user will logout.
     "id" : "1"
 }
 ```
+### get user hash
+Some website have special rights, they are able to request for a user OTL hash.
+```
+### Request
+{
+    "method": "website.userHash", 
+    "id": "[partner-uuid]",
+    "params": {
+        "addressid" : 10000
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you will receive!
+{
+    "jsonrpc" : "2.0",
+    "result" : {
+        "hash" : "md5String"
+    },
+    "id" : "1"
+}
+```
+### Find user
 
+Some website have special rights, they are able to search in users.
+At least one param musst be filled!
+"```company```" searches in "```company```" and "```department```"
+```
+### Request:
+{
+    "method": "website.findUser", 
+    "id": "[partner-uuid]",
+    "params": {
+        "addressid" : NULL,
+        "firstname" : "",
+        "lastname" : "",
+        "mail" : "",
+        "company": ""
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you should receive, also if the user was not logged in!
+{
+    "jsonrpc" : "2.0",
+    "result" : {
+        "users" : [
+            {
+                "uuid"        : "[uuid]",
+                "addressid"   : 10000,
+                "mail"        : "max@mustermann.de",
+                "pass"        : "passwort",
+                "sex"         : "F",
+                "salutation"  : "Frau",
+                "title"       : "Dr.",
+                "firstname"   : "Max",
+                "lastname"    : "Mustermann",
+                "birthdate"   : "1977-12-03",
+                "company"     : "urbanstudio GmbH",
+                "department"  : "Programmierung",
+                "streetnr"    : "Musterstraße 10",
+                "zip"         : "12345",
+                "city"        : "Harzgerode",
+                "country"     : "DE",
+                "phone"       : "012345678910",
+                "memberof"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 836,
+                        "in"      : "2015-01-01",
+                        "out"     : "2018-12-31",
+                        "active"  : 0
+                    }
+                ],
+                "agmemberof"    : [
+                    {
+                        "name"    : ""AG Physik und Technik in der bildgebende"",
+                        "id"      : 4
+                    },
+                    {
+                        "name"    : "FFZ",
+                        "id"      : 17
+                    }
+                ],
+                "participatingevents"    : [
+                    "2021RD",
+                    "2022RD"
+                ],
+                "participatingconrad"    : [
+                    "BASIC",
+                    "CONRAD-RD2"
+                ]
+            }
+        ]
+    },
+    "id" : "[partner-uuid]"
+}
+```
 ## 3 Endpoints in API of website
 
 This section is only for verified websites
@@ -665,90 +771,7 @@ On user logout all websites will receive a request to kill the actual session fo
 }
 ```
 
-### Find user
 
-Some website have special rights, they are able to search in users.
-At least one param musst be filled!
-"```company```" searches in "```company```" and "```department```"
-```
-### Request:
-{
-    "method": "website.killUserSession", 
-    "id": "[partner-uuid]",
-    "params": {
-        "addressid" : NULL,
-        "firstname" : "",
-        "lastname" : "",
-        "mail" : "",
-        "company": ""
-    },
-    "jsonrpc": "2.0"
-}
-```
-```
-### Response you should receive, also if the user was not logged in!
-{
-    "jsonrpc" : "2.0",
-    "result" : {
-        "users" : [
-            {
-                "uuid"        : "[uuid]",
-                "addressid"   : 10000,
-                "mail"        : "max@mustermann.de",
-                "pass"        : "passwort",
-                "sex"         : "F",
-                "salutation"  : "Frau",
-                "title"       : "Dr.",
-                "firstname"   : "Max",
-                "lastname"    : "Mustermann",
-                "birthdate"   : "1977-12-03",
-                "company"     : "urbanstudio GmbH",
-                "department"  : "Programmierung",
-                "streetnr"    : "Musterstraße 10",
-                "zip"         : "12345",
-                "city"        : "Harzgerode",
-                "country"     : "DE",
-                "phone"       : "012345678910",
-                "memberof"    : [
-                    {
-                        "name"    : "DRG",
-                        "number"  : 500,
-                        "in"      : "2012-01-01",
-                        "out"     : "",
-                        "active"  : 1
-                    },
-                    {
-                        "name"    : "DGMP",
-                        "number"  : 836,
-                        "in"      : "2015-01-01",
-                        "out"     : "2018-12-31",
-                        "active"  : 0
-                    }
-                ],
-                "agmemberof"    : [
-                    {
-                        "name"    : ""AG Physik und Technik in der bildgebende"",
-                        "id"      : 4
-                    },
-                    {
-                        "name"    : "FFZ",
-                        "id"      : 17
-                    }
-                ],
-                "participatingevents"    : [
-                    "2021RD",
-                    "2022RD"
-                ],
-                "participatingconrad"    : [
-                    "BASIC",
-                    "CONRAD-RD2"
-                ]
-            }
-        ]
-    },
-    "id" : "[partner-uuid]"
-}
-```
 ### user data push
 
 In the case, that a user has been logged in to a website before and there are changes in the user data we sent, a websites receives user data updates.
