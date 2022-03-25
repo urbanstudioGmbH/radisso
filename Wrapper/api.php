@@ -5,6 +5,7 @@
  * Some methods need your attention, Wrapper is
  * only a demonstration, not a working class!
  */
+require(dirname(__FILE__)."/classes/Radisso/Client.php");
 require(dirname(__FILE__)."/classes/Radisso/Wrapper.php");
 /**
  * All incoming requests will be encoded.
@@ -16,6 +17,7 @@ $inputData = file_get_contents('php://input');
  * Key is the request type
  * Value = String for functions, array for static methods in a class
  * All your callback methods will receive stdClass $data
+ * Websites need to implement only createUserSession and killUserSession (later userDataPush)
  */
 $radissoCallbacks = [
     "userDataPush"          => ["\Radisso\Client", "userDataPush"],
