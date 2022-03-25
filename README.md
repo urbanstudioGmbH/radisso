@@ -273,8 +273,7 @@ This section is only for verified data providers!
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
-                "street"      : "Musterstraße",
-                "streetno"    : "1b",
+                "streetnr"    : "Musterstraße 10",
                 "zip"         : "12345",
                 "city"        : "Harzgerode",
                 "country"     : "DE",
@@ -350,8 +349,7 @@ Send only users with changes!
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
-                "street"      : "Musterstraße",
-                "streetno"    : "1b",
+                "streetnr"    : "Musterstraße 10",
                 "zip"         : "12345",
                 "city"        : "Harzgerode",
                 "country"     : "DE",
@@ -573,8 +571,7 @@ If user has enabled 2FA, the request is sent after the 2FA check.
             "birthdate"   : "1977-12-03",
             "company"     : "urbanstudio GmbH",
             "department"  : "Programmierung",
-            "street"      : "Musterstraße",
-            "streetno"    : "1b",
+            "streetnr"    : "Musterstraße 10",
             "zip"         : "12345",
             "city"        : "Harzgerode",
             "country"     : "DE",
@@ -660,7 +657,7 @@ On user logout all websites will receive a request to kill the actual session fo
 }
 ```
 ```
-### Response you should give, also if the user was not logged in!
+### Response you should receive, also if the user was not logged in!
 {
     "jsonrpc" : "2.0",
     "result" : "OK",
@@ -689,7 +686,7 @@ At least one param musst be filled!
 }
 ```
 ```
-### Response you should give, also if the user was not logged in!
+### Response you should receive, also if the user was not logged in!
 {
     "jsonrpc" : "2.0",
     "result" : {
@@ -707,8 +704,7 @@ At least one param musst be filled!
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
-                "street"      : "Musterstraße",
-                "streetno"    : "1b",
+                "streetnr"    : "Musterstraße 10",
                 "zip"         : "12345",
                 "city"        : "Harzgerode",
                 "country"     : "DE",
@@ -780,8 +776,7 @@ So the website may use correct email address for notifications, if needed.
                 "birthdate"   : "1977-12-03",
                 "company"     : "urbanstudio GmbH",
                 "department"  : "Programmierung",
-                "street"      : "Musterstraße",
-                "streetno"    : "1b",
+                "streetnr"    : "Musterstraße 10",
                 "zip"         : "12345",
                 "city"        : "Harzgerode",
                 "country"     : "DE",
@@ -846,6 +841,14 @@ Staging-Main-Login-Url:   https://dev.radisso.de/
 The Staging system will be available on the end of July 2021
 
 ## Changelog
+
+### [0.0.7] - 2022-03-25
+
+#### Changed
+- changed user data params street to streetnr in different Requests/Responses (street, streetno, zip, country, phone)
+- removed user data param streetno in different Requests/Responses
+- Changed Wrapper to latest Version
+- Changed some DEMO Files.
 
 ### [0.0.6] - 2022-03-07
 
