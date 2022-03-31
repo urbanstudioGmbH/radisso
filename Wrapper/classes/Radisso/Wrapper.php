@@ -689,13 +689,11 @@ namespace Radisso{
         }
 
         public static function usBase64encode(string $string){
-            $str = base64_encode($string);
-            return urlencode($str);
+            return str_replace(["+","/","="],["-","_","."],base64_encode($string));
         }
 
         public static function uaBase64decode(string $string){
-            $str = urldecode($string);
-            return base64_decode($str);
+            return base64_decode(str_replace(["-","_","."],["+","/","="],$string));
         }
     }
 }
