@@ -63,13 +63,13 @@ namespace Radisso{
             if(empty($url)) $url = $noneep;
 
             if(!is_null($origin) && $origin){
-                $url .= $instance::usBase64encode($origin)."/";
+                $url .= $instance::uaBase64encode($origin)."/";
             }else{
                 $origin = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-                $url .= $instance::usBase64encode($origin)."/";
+                $url .= $instance::uaBase64encode($origin)."/";
             }
             if(!is_null($endpoint) && $endpoint){
-                $url .= $instance::usBase64encode($endpoint)."/";
+                $url .= $instance::uaBase64encode($endpoint)."/";
             }
             return $url;
         }
@@ -688,7 +688,7 @@ namespace Radisso{
             return $headers;
         }
 
-        public static function usBase64encode(string $string){
+        public static function uaBase64encode(string $string){
             return str_replace(["+","/","="],["-","_","."],base64_encode($string));
         }
 
