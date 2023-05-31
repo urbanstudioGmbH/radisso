@@ -410,6 +410,20 @@ Send only users with changes!
     "method": "data.listPushPersonCertificates", 
     "id": "[partner-uuid]",
     "params": {
+        "types": [
+            {
+                "vewaid"  : 1,
+                "name"  : "AG Herz Personen"
+            },
+            {
+                "vewaid"  : 2,
+                "name"  : "AG BVB Personen"
+            },
+            {
+                "vewaid"  : 3,
+                "name"  : "AG Uro"
+            }
+        ],
         "persons": [
             {
                 "addressid"   : 10000,
@@ -428,10 +442,7 @@ Send only users with changes!
                 "mail"        : "gabriele@mustermann.de",
                 "certs"       : [
                     {
-                        "type" : {
-                            "vewaid"  : 123456,
-                            "name"  : "AG Herz Personen"
-                        },
+                        "type"         : 1,
                         "modules"      : ["CT","MRT"],
                         "level"        : 1
                         "status"       : "ausgestellt",
@@ -439,10 +450,7 @@ Send only users with changes!
                         "public"       : 0
                     },
                     {
-                        "type" : {
-                            "vewaid"  : 234567,
-                            "name"  : "DeGIR/DGNR-Personen"
-                        },
+                        "type"         : 2,
                         "modules"      : ["A","B","C","D","E"],
                         "level"        : 2
                         "status"       : "ausgestellt",
