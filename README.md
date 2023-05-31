@@ -402,7 +402,68 @@ Send only users with changes!
     "id" : "partner-uuid"
 }
 ```
+### Person certificates list push
 
+```
+### Request:
+{
+    "method": "data.listPushPersonCertificates", 
+    "id": "[partner-uuid]",
+    "params": {
+        "persons": [
+            {
+                "addressid"   : 10000,
+                "sex"         : "F",
+                "salutation"  : "Frau",
+                "title"       : "Dr.",
+                "firstname"   : "Gabriele",
+                "lastname"    : "Mustermann",
+                "company"     : "urbanstudio GmbH",
+                "department"  : "Programmierung",
+                "streetnr"    : "Musterstraße 10",
+                "zip"         : "12345",
+                "city"        : "Harzgerode",
+                "country"     : "DE",
+                "phone"       : "012345678910",
+                "mail"        : "gabriele@mustermann.de",
+                "certs"       : [
+                    {
+                        "type" : {
+                            "vewaid"  : 123456,
+                            "name"  : "AG Herz Personen"
+                        },
+                        "modules"      : ["CT","MRT"],
+                        "level"        : 1
+                        "status"       : "ausgestellt",
+                        "date"         : "2023-02-28",
+                        "public"       : 0
+                    },
+                    {
+                        "type" : {
+                            "vewaid"  : 234567,
+                            "name"  : "DeGIR/DGNR-Personen"
+                        },
+                        "modules"      : ["A","B","C","D","E"],
+                        "level"        : 2
+                        "status"       : "ausgestellt",
+                        "date"         : "2023-02-28",
+                        "public"       : 1
+                    }
+                ]
+            }
+        ]
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "partner-uuid"
+}
+```
 ### User password change push
 
 Send only one users password change!
@@ -859,7 +920,6 @@ You will add "dev." in the URL of the API and loginEndpoints.
 Staging-API-Url:          https://dev.api.radisso.de/
 Staging-Main-Login-Url:   https://dev.radisso.de/
 
-The Staging system will be available on the end of July 2021
 
 ## Changelog
 
