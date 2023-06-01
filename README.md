@@ -712,6 +712,101 @@ At least one param musst be filled!
     "id" : "[partner-uuid]"
 }
 ```
+### get person certification types
+parameter force true|false reloads data from data.provider
+```
+### Request
+{
+    "method": "website.getPersonCertificationTypes", 
+    "id": "[partner-uuid]",
+    "params": {
+        "force" : false
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you will receive!
+{
+    "jsonrpc" : "2.0",
+    "result" : {
+        "types": [
+            {
+                "vewaid"  : 1,
+                "name"  : "AG Herz Personen"
+            },
+            {
+                "vewaid"  : 2,
+                "name"  : "AG BVB Personen"
+            },
+            {
+                "vewaid"  : 3,
+                "name"  : "AG Uro"
+            }
+        ]
+    },
+    "id" : "[partner-uuid]"
+}
+```
+### get person certifications
+parameter force true|false reloads data from data provider
+```
+### Request
+{
+    "method": "website.getPersonCertifications", 
+    "id": "[partner-uuid]",
+    "params": {
+        "force" : false
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you will receive!
+{
+    "jsonrpc" : "2.0",
+    "result" : {
+        "persons": [
+            {
+                "addressid"   : 10000,
+                "sex"         : "F",
+                "salutation"  : "Frau",
+                "title"       : "Dr.",
+                "firstname"   : "Gabriele",
+                "lastname"    : "Mustermann",
+                "company"     : "urbanstudio GmbH",
+                "department"  : "Programmierung",
+                "streetnr"    : "Musterstraße 10",
+                "zip"         : "12345",
+                "city"        : "Harzgerode",
+                "country"     : "DE",
+                "phone"       : "012345678910",
+                "mail"        : "gabriele@mustermann.de",
+                "certs"       : [
+                    {
+                        "type"         : 1,
+                        "modules"      : ["CT","MRT"],
+                        "level"        : 1
+                        "status"       : "ausgestellt",
+                        "date"         : "2023-02-28",
+                        "public"       : 0
+                    },
+                    {
+                        "type"         : 2,
+                        "modules"      : ["A","B","C","D","E"],
+                        "level"        : 2
+                        "status"       : "ausgestellt",
+                        "date"         : "2023-02-28",
+                        "public"       : 1
+                    }
+                ]
+            }
+        ]
+    },
+    "id" : "[partner-uuid]"
+}
+```
+
 ## 3 Endpoints in API of website
 
 This section is only for verified websites
