@@ -774,6 +774,28 @@ To request a user list push. *** Do not answer with a users list, instead send s
     "id" : "partner-uuid"
 }
 ```
+### Request clients and panel push
+
+To request a Clients and Panel list ***
+
+```
+### Request:
+{
+    "method": "data.requestClientsPanel", 
+    "id": "[partner-uuid]",
+    "params": {
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "partner-uuid"
+}
+```
 ### Request one users whole data
 
 Has to be implemented later. This will request for a complete data set of one customer (including addresses etc.)
