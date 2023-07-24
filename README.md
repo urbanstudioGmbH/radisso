@@ -304,6 +304,58 @@ This section is only for verified data providers!
                         "id"      : 17
                     }
                 ],
+                "memberships"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "AG1",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "AG2",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              }
+                        ]
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 948,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "DGMP AG1",
+                                  "number"  : 1,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "DGMP AG2",
+                                  "number"  : 2,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "2023-05-31",
+                                  "active"  : 0
+                            
+                              }
+                        ]
+                    }
+                ],
                 "participatingevents"    : [
                     "2021RD",
                     "2022RD"
@@ -380,6 +432,58 @@ Send only users with changes!
                         "id"      : 17
                     }
                 ],
+                "memberships"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "AG1",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "AG2",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              }
+                        ]
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 948,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "DGMP AG1",
+                                  "number"  : 1,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "DGMP AG2",
+                                  "number"  : 2,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "2023-05-31",
+                                  "active"  : 0
+                            
+                              }
+                        ]
+                    }
+                ],
                 "participatingevents"    : [
                     "2021RD",
                     "2022RD"
@@ -413,16 +517,25 @@ Send only users with changes!
         "types": [
             {
                 "vewaid"  : 1,
-                "name"  : "AG Herz Personen"
+                "name"  : "AG Herz Personen",
+                "center" : false
             },
             {
                 "vewaid"  : 2,
-                "name"  : "AG BVB Personen"
+                "name"  : "AG BVB Personen",
+                "center" : false
             },
             {
                 "vewaid"  : 3,
-                "name"  : "AG Uro"
+                "name"  : "AG Uro",
+                "center" : false
+            },
+            {
+                "vewaid"  : 3,
+                "name"  : "DeGIR Zentrum",
+                "center" : true
             }
+
         ],
         "persons": [
             {
@@ -507,6 +620,73 @@ If a user must not login urgently, use this method.
     "id": "[partner-uuid]",
     "params": {
         "addressid"   : 10000
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response
+{
+    "jsonrpc" : "2.0",
+    "result" : "OK",
+    "id" : "partner-uuid"
+}
+```
+### Client and Panel liszPush
+
+Sends all Mandants including panels for each Mandant
+```
+### Request:
+{
+    "method": "data.clientPanel", 
+    "id": "[partner-uuid]",
+    "params": {
+        "panel" : [
+            {
+                "id"       : 1,
+                "name"     : "Deutsche Röntgengesellschaft e.V.",
+                "short"    : "DRG",
+                "active"   : true,
+                "panel"    : [
+                    {
+                        "id"      : 101,
+                        "name"    : "Arbeitsgemeinschaft URO in der DRG",
+                        "short"   : "AG Uro",
+                        "public"  : true,
+                        "active"  : true
+                    },
+                    {
+                        "id"      : 102,
+                        "name"    : "AG Herzu und Gefäße",
+                        "short"   : "AG Herz",
+                        "public"  : true,
+                        "active"  : true
+                    }
+                ]
+            },
+            {
+                "id"       : 2,
+                "name"     : "Deutsche Gesellschaft für Medizinische Physik e.V.",
+                "short"    : "DGMP",
+                "active"   : true,
+                "panel"    : [
+                    {
+                        "id"      : 201,
+                        "name"    : "AG Informationstechnologie",
+                        "short"   : "AGiT",
+                        "public"  : true,
+                        "active"  : true
+                    }
+                ]
+            },
+            {
+                "id"       : 3,
+                "name"     : "Deutsche Gesellschaft für minimalinvasive Therapie in der DRG",
+                "short"    : "DEGIR",
+                "active"   : true,
+                "panel"    : [] // [] or null
+            }
+        ]
     },
     "jsonrpc": "2.0"
 }
@@ -720,6 +900,58 @@ At least one param musst be filled!
                         "id"      : 17
                     }
                 ],
+                "memberships"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "AG1",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "AG2",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              }
+                        ]
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 948,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "DGMP AG1",
+                                  "number"  : 1,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "DGMP AG2",
+                                  "number"  : 2,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "2023-05-31",
+                                  "active"  : 0
+                            
+                              }
+                        ]
+                    }
+                ],
                 "participatingevents"    : [
                     "2021RD",
                     "2022RD"
@@ -755,15 +987,18 @@ parameter force true|false reloads data from data.provider
         "types": [
             {
                 "vewaid"  : 1,
-                "name"  : "AG Herz Personen"
+                "name"  : "AG Herz Personen",
+                "center" : false
             },
             {
                 "vewaid"  : 2,
-                "name"  : "AG BVB Personen"
+                "name"  : "AG BVB Personen",
+                "center" : false
             },
             {
                 "vewaid"  : 3,
-                "name"  : "AG Uro"
+                "name"  : "AG Uro",
+                "center" : false
             }
         ]
     },
@@ -892,6 +1127,58 @@ If user has enabled 2FA, the request is sent after the 2FA check.
                     "id"      : 17
                 }
             ],
+                "memberships"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "AG1",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "AG2",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              }
+                        ]
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 948,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "DGMP AG1",
+                                  "number"  : 1,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "DGMP AG2",
+                                  "number"  : 2,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "2023-05-31",
+                                  "active"  : 0
+                            
+                              }
+                        ]
+                    }
+                ],
             "participatingevents"    : [
                 "2021RD",
                 "2022RD"
@@ -1012,6 +1299,58 @@ So the website may use correct email address for notifications, if needed.
                     {
                         "name"    : "FFZ",
                         "id"      : 17
+                    }
+                ],
+                "memberships"    : [
+                    {
+                        "name"    : "DRG",
+                        "number"  : 500,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "AG1",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "AG2",
+                                  "number"  : 500,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              }
+                        ]
+                    },
+                    {
+                        "name"    : "DGMP",
+                        "number"  : 948,
+                        "in"      : "2012-01-01",
+                        "out"     : "",
+                        "active"  : 1,
+                        "ags"     : [
+                              {
+                                  "name"    : "DGMP AG1",
+                                  "number"  : 1,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "",
+                                  "active"  : 1,
+                            
+                              },
+                              {
+                                  "name"    : "DGMP AG2",
+                                  "number"  : 2,
+                                  "in"      : "2012-01-01",
+                                  "out"     : "2023-05-31",
+                                  "active"  : 0
+                            
+                              }
+                        ]
                     }
                 ],
                 "participatingevents"    : [
