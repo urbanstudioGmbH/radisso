@@ -306,26 +306,33 @@ This section is only for verified data providers!
                 ],
                 "memberships"    : [
                     {
-                        "name"    : "DRG",
-                        "number"  : 500,
+                        "mandant"    : "DRG",
+                        "mandantId"  : 500,
                         "in"      : "2012-01-01",
                         "out"     : "",
                         "active"  : 1,
-                        "ags"     : [
+                        "panel"     : [
                               {
-                                  "name"    : "AG1",
-                                  "number"  : 500,
+                                  "name"    : "Forum Junge Radiologie",
+                                  "area"    : "Forum",
+                                  "gremiumId"  : 500,
                                   "in"      : "2012-01-01",
                                   "out"     : "",
-                                  "active"  : 1,
-                            
+                                  "function" : "Mitglied",
+                                  "function_in" :  "2012-01-01",
+                                  "function_out" : "",
+                                  "active"  : 1
                               },
                               {
-                                  "name"    : "AG2",
-                                  "number"  : 500,
+                                  "name"    : "Forum Junge Radiologie",
+                                  "area"    : "Forum",
+                                  "gremiumId"  : 500,
                                   "in"      : "2012-01-01",
-                                  "out"     : "",
-                                  "active"  : 1,
+                                  "out"     : "2023-12-31",
+                                  "function" : "Mitglied",
+                                  "function_in" :  "2012-01-01",
+                                  "function_out" : ""
+                                  "active"  : 0
                             
                               }
                         ]
@@ -434,26 +441,33 @@ Send only users with changes!
                 ],
                 "memberships"    : [
                     {
-                        "name"    : "DRG",
-                        "number"  : 500,
+                        "mandant"    : "DRG",
+                        "mandantId"  : 500,
                         "in"      : "2012-01-01",
                         "out"     : "",
                         "active"  : 1,
-                        "ags"     : [
+                        "panel"     : [
                               {
-                                  "name"    : "AG1",
-                                  "number"  : 500,
+                                  "name"    : "Forum Junge Radiologie",
+                                  "area"    : "Forum",
+                                  "gremiumId"  : 500,
                                   "in"      : "2012-01-01",
                                   "out"     : "",
-                                  "active"  : 1,
-                            
+                                  "function" : "Mitglied",
+                                  "function_in" :  "2012-01-01",
+                                  "function_out" : "",
+                                  "active"  : 1
                               },
                               {
-                                  "name"    : "AG2",
-                                  "number"  : 500,
+                                  "name"    : "Forum Junge Radiologie",
+                                  "area"    : "Forum",
+                                  "gremiumId"  : 500,
                                   "in"      : "2012-01-01",
-                                  "out"     : "",
-                                  "active"  : 1,
+                                  "out"     : "2023-12-31",
+                                  "function" : "Mitglied",
+                                  "function_in" :  "2012-01-01",
+                                  "function_out" : ""
+                                  "active"  : 0
                             
                               }
                         ]
