@@ -1099,7 +1099,75 @@ parameter force true|false reloads data from data provider
     "id" : "[partner-uuid]"
 }
 ```
+### get all client panels
 
+Gets client panel data to match login or permission check parameter "force" is optional.
+```
+### Request:
+{
+    "method": "website.getClientsPanel", 
+    "id": "[partner-uuid]",
+    "params": {
+        "force" : false
+    },
+    "jsonrpc": "2.0"
+}
+```
+```
+### Response you should receive, also if the user was not logged in!
+{
+    "jsonrpc" : "2.0",
+    "result : {
+        "panel" : [
+            {
+                "id"       : 1,
+                "name"     : "Deutsche Röntgengesellschaft e.V.",
+                "short"    : "DRG",
+                "active"   : true,
+                "panel"    : [
+                    {
+                        "id"      : 101,
+                        "name"    : "Arbeitsgemeinschaft URO in der DRG",
+                        "short"   : "AG Uro",
+                        "public"  : true,
+                        "active"  : true
+                    },
+                    {
+                        "id"      : 102,
+                        "name"    : "AG Herzu und Gefäße",
+                        "short"   : "AG Herz",
+                        "public"  : true,
+                        "active"  : true
+                    }
+                ]
+            },
+            {
+                "id"       : 2,
+                "name"     : "Deutsche Gesellschaft für Medizinische Physik e.V.",
+                "short"    : "DGMP",
+                "active"   : true,
+                "panel"    : [
+                    {
+                        "id"      : 201,
+                        "name"    : "AG Informationstechnologie",
+                        "short"   : "AGiT",
+                        "public"  : true,
+                        "active"  : true
+                    }
+                ]
+            },
+            {
+                "id"       : 3,
+                "name"     : "Deutsche Gesellschaft für minimalinvasive Therapie in der DRG",
+                "short"    : "DEGIR",
+                "active"   : true,
+                "panel"    : [] // [] or null
+            }
+        ]
+    },
+    "id" : "1"
+}
+```
 ## 3 Endpoints in API of website
 
 This section is only for verified websites
