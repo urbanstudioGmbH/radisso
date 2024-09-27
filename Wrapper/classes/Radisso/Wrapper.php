@@ -3,6 +3,7 @@
 //defines
 
 namespace Radisso{
+    use \UA\DateTime as DateTime;
     /**
      * Wrapper class for Radisso Login Management
      * @version 0.2.1
@@ -61,11 +62,15 @@ namespace Radisso{
                 $url = $instance::$cfg->loginEndpoints->NONE->url;
             }*/
             if(empty($url)) $url = $noneep;
-
+            $noWWW = str_replace("www.","",$_SERVER["HTTP_HOST"]);
+            if(substr($noWWW,0,4) == "dev."){
+                $url = "https://dev.radisso.de/sso/";
+            }
             if(!is_null($origin) && $origin){
                 $url .= $instance::uaBase64encode($origin)."/";
             }else{
                 $origin = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+                //exit($origin);
                 $url .= $instance::uaBase64encode($origin)."/";
             }
             if(!is_null($endpoint) && $endpoint){
@@ -247,6 +252,7 @@ namespace Radisso{
             $params = $userdata;
             $instance = new static();
             $result = $instance->SendRequestToRadisso("website.userHash", $params);
+            //mail("mf@urbanstudio.de", "Wrappertest", print_r($params,1)." - ".print_r($result,1));
             if (isset($result->hash) && $result->hash) {
                 return $result->hash;
             }
@@ -269,11 +275,70 @@ namespace Radisso{
             $instance = new static();
             $result = $instance->SendRequestToRadisso("website.checkUser", $params);
             if (isset($result->isUser)) {
+                //mail("mf@urbanstudio.de", "User Check", print_r($result,1));
                 return $result;
             }
             return NULL;
         }
 
+        public static function userResetHash(\stdClass $userdata){
+            $params = new \stdClass();
+            $params = $userdata;
+            $instance = new static();
+            $result = $instance->SendRequestToRadisso("website.userResetHash", $params);
+            //mail("mf@urbanstudio.de", "User Check", print_r($result,1));
+            if (isset($result->isUser)) {
+                //
+                return $result;
+            }
+            return NULL;
+        }
+
+        public static function getPersonCertifications(bool $force = true){ // array of user stdClass objects
+            $params = new \stdClass();
+            $params->force = $force;
+            $instance = new static();
+            $result = $instance->SendRequestToRadisso("website.getPersonCertifications", $params);
+            //return $result;
+            if (isset($result->persons) && is_array($result->persons)) {
+                return $result->persons;
+            }
+            return NULL;
+        }
+
+        public static function getPersonCertificationTypes(bool $force = true){ // array of user stdClass objects
+            $params = new \stdClass();
+            $params->force = $force;
+            $instance = new static();
+            $result = $instance->SendRequestToRadisso("website.getPersonCertificationTypes", $params);
+            if (isset($result->types) && is_array($result->types)) {
+                return $result->types;
+            }
+            return $result;
+        }
+
+        public static function getClientPanel(bool $force = true){ // array of user stdClass objects
+            $params = new \stdClass();
+            $params->force = $force;
+            $instance = new static();
+            $result = $instance->SendRequestToRadisso("website.getClientsPanel", $params);
+            //return $result;
+            if (isset($result->data) && is_array($result->data)) {
+                return $result->data;
+            }
+            return $result;
+        }
+
+        public static function getUserList(){ // array of user stdClass objects
+            $params = new \stdClass();
+            $instance = new static();
+            $result = $instance->SendRequestToRadisso("website.userList", $params);
+            //return $result;
+            if (isset($result->users) && is_array($result->users)) {
+                return $result->users;
+            }
+            return $result;
+        }
         /**
          * Method processIncomingRequest
          * 
@@ -478,7 +543,17 @@ namespace Radisso{
                         return $sent->result;
                     }elseif(isset($sent->result) && isset($sent->result->users) && $method == "website.searchUser"){
                         return $sent->result;
+                    }elseif(isset($sent->result) && isset($sent->result->hash) && $method == "website.userHash"){
+                        return $sent->result;
+                    }elseif(isset($sent->result) && isset($sent->result->types) && $method == "website.getPersonCertificationTypes"){
+                        return $sent->result;
+                    }elseif(isset($sent->result) && isset($sent->result->persons) && $method == "website.getPersonCertifications"){
+                        return $sent->result;
                     }elseif(isset($sent->result) && $method == "website.checkUser"){
+                        return $sent->result;
+                    }elseif(isset($sent->result) && $method == "partner.addDomains"){
+                        return $sent->result;
+                    }elseif(isset($sent->result)){
                         return $sent->result;
                     }
                 }
@@ -564,6 +639,8 @@ namespace Radisso{
          * @return void
          */
         public function sendRequest(string $payload, string $url = NULL){
+            $apiendpoint = static::$cfg->radissoApiEndpoint;
+            //mail("mf@urbanstudio.de", "apiendpoint", print_r(static::$cfg->radissoApiEndpoint,1));
             if (is_null($url)) {
                 $ch = \curl_init(static::$cfg->radissoApiEndpoint);
             }else{
@@ -602,7 +679,7 @@ namespace Radisso{
             if(isset($headers["X-UA-BEARER"]) && !empty($headers["X-UA-BEARER"])){
                 static::$radissoReceiveAESKeyEncrypted = trim($headers["X-UA-BEARER"]);
                 $decrypted = $this->aesDecryption($body);
-                if (json_decode($decrypted) != null) {
+                if (is_string($decrypted) && json_decode($decrypted) != null) {
                     return json_decode($decrypted);
                 }
                 return $decrypted;
@@ -631,18 +708,18 @@ namespace Radisso{
             $pl->id = static::$uuid;
             //mail("mf@urbanstudio.de", "success response PANDA", print_r($pl,1));
             if(!$encrypt){
-                header('Content-type: application/json');
+                uaheader('Content-type: application/json');
                 echo json_encode($pl);
             }else{
-                header('Content-type: text/plain');
+                uaheader('Content-type: text/plain');
                 $payload = $this->aesEncryption($pl);
                 //mail("mf@urbanstudio.de", "success response PANDA 2", print_r($payload,1));
                 if (!empty(static::$radissoSendAESKeyEncrypted)) {
-                    header("X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
+                    uaheader("X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
                 }
                 echo $payload;
             }
-            die();
+            ua()->getDB()->commit();
         }
         /**
          * Method sendErrorResponse
@@ -662,17 +739,16 @@ namespace Radisso{
             $pl->id = static::$uuid;
             //mail("mf@urbanstudio.de", "error response PANDA", print_r($pl,1));
             if(!$encrypt){
-                header('Content-type: application/json');
+                uaHeader('Content-type: application/json');
                 echo json_encode($pl);
             }else{
-                header('Content-type: text/plain');
+                uaHeader('Content-type: text/plain');
                 $payload = $this->aesEncryption($pl);
                 if (!empty(static::$radissoSendAESKeyEncrypted)) {
-                    header("X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
+                    uaHeader("X-UA-BEARER: ".static::$radissoSendAESKeyEncrypted);
                 }
                 echo $payload;
             }
-            die();
         }
 
         public function get_headers_from_curl_response($response_headers){
@@ -681,6 +757,7 @@ namespace Radisso{
                 if ($i === 0) {
                     $headers['HTTP_CODE'] = $line;
                 } else {
+                    if(stristr($line, ":") === false) continue;
                     list($key, $value) = explode(': ', $line);
                     $headers[strtoupper($key)] = $value;
                 }
@@ -689,10 +766,14 @@ namespace Radisso{
         }
 
         public static function uaBase64encode(string $string){
+            //$str = base64_encode($string);
+            //return urlencode($str);
             return str_replace(["+","/","="],["-","_","."],base64_encode($string));
         }
 
         public static function uaBase64decode(string $string){
+            //$str = urldecode($string);
+            //return base64_decode($str);
             return base64_decode(str_replace(["-","_","."],["+","/","="],$string));
         }
     }
