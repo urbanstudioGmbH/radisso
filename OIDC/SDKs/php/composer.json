@@ -1,0 +1,17 @@
+{
+    "name": "radisso/oidc-client",
+    "description": "RadiSSO OIDC PHP Client – Authorization Code (PKCE), Client Credentials, Device Code, Token Management",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Radisso\\OIDCClient\\": "src/"
+        }
+    }
+}

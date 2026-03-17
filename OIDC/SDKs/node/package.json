@@ -1,0 +1,12 @@
+{
+  "name": "radisso-oidc",
+  "version": "1.0.0",
+  "description": "RadiSSO OIDC Node.js Client – Authorization Code (PKCE), Client Credentials, Device Code, Token Management",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["oidc", "oauth2", "radisso", "openid-connect"]
+}
