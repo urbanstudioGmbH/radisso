@@ -4,7 +4,7 @@ radisso is an SSO (Single-Sign-On) eco system for the radiology society of the D
 ## Important
 
 New Clients must use the new RadiSSO-OIDC!
-See ![OIDC/CLIENT-INTEGRATION.md — OIDC Documentation]
+See ![CLIENT-INTEGRATION.md — OIDC Documentation] (OIDC/CLIENT-INTEGRATION.md)
 
 ## Prerequisites
 There are few things you need to take care of before onboarding:
