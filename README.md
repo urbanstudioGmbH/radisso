@@ -1,6 +1,11 @@
 # radisso
 radisso is an SSO (Single-Sign-On) eco system for the radiology society of the DRG and associated societies in Germany
 
+## Important
+
+New Clients must use the new RadiSSO-OIDC!
+See [OIDC/CLIENT-INTEGRATION.md — OIDC Documentation]
+
 ## Prerequisites
 There are few things you need to take care of before onboarding:
 1. make sure your API-Endpoint is secured by an SSL-Certificate
